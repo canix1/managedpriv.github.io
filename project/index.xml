@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Projects on Robin Graberg - Managed Privileges</title>
-    <link>https://examplesite.com/project/</link>
+    <link>https://canix1.github.io/managedpriv.github.io/project/</link>
     <description>Recent content in Projects on Robin Graberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 07 Feb 2019 10:47:55 +0600</lastBuildDate>
     
-	<atom:link href="https://examplesite.com/project/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://canix1.github.io/managedpriv.github.io/project/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>AD ACL Scanner</title>
-      <link>https://examplesite.com/project/ad-acl-scanner/</link>
+      <link>https://canix1.github.io/managedpriv.github.io/project/ad-acl-scanner/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
-      <guid>https://examplesite.com/project/ad-acl-scanner/</guid>
+      <guid>https://canix1.github.io/managedpriv.github.io/project/ad-acl-scanner/</guid>
       <description>AD ACL Scanner Current version Version: 6.0
 9 February, 2020</description>
     </item>
