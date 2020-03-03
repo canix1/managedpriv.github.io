@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>security on Robin Graberg - Managed Privileges</title>
-    <link>https://canix1.github.io/managedpriv.github.io/tags/security/</link>
+    <link>/tags/security/</link>
     <description>Recent content in security on Robin Graberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 07 Feb 2019 10:47:55 +0600</lastBuildDate>
     
-	<atom:link href="https://canix1.github.io/managedpriv.github.io/tags/security/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/security/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Do You Allow Blank Passwords In Your Environment</title>
-      <link>https://canix1.github.io/managedpriv.github.io/blog/do-you-allow-blank-passwords-in-your-environment/</link>
+      <link>/blog/do-you-allow-blank-passwords-in-your-environment/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
-      <guid>https://canix1.github.io/managedpriv.github.io/blog/do-you-allow-blank-passwords-in-your-environment/</guid>
+      <guid>/blog/do-you-allow-blank-passwords-in-your-environment/</guid>
       <description>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
     </item>
     
