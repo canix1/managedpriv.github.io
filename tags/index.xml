@@ -2,48 +2,39 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Robin Graberg - Managed Privileges</title>
-    <link>https://canix1.github.io/managedpriv.github.io/tags/</link>
+    <link>https://examplesite.com/tags/</link>
     <description>Recent content in Tags on Robin Graberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 07 Feb 2019 10:47:55 +0600</lastBuildDate>
     
-	<atom:link href="https://canix1.github.io/managedpriv.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://examplesite.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>active directory</title>
-      <link>https://canix1.github.io/managedpriv.github.io/tags/active-directory/</link>
+      <link>https://examplesite.com/tags/active-directory/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
-      <guid>https://canix1.github.io/managedpriv.github.io/tags/active-directory/</guid>
+      <guid>https://examplesite.com/tags/active-directory/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>blank password</title>
-      <link>https://canix1.github.io/managedpriv.github.io/tags/blank-password/</link>
+      <title>password</title>
+      <link>https://examplesite.com/tags/password/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
-      <guid>https://canix1.github.io/managedpriv.github.io/tags/blank-password/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>no password</title>
-      <link>https://canix1.github.io/managedpriv.github.io/tags/no-password/</link>
-      <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
-      
-      <guid>https://canix1.github.io/managedpriv.github.io/tags/no-password/</guid>
+      <guid>https://examplesite.com/tags/password/</guid>
       <description></description>
     </item>
     
     <item>
       <title>security</title>
-      <link>https://canix1.github.io/managedpriv.github.io/tags/security/</link>
+      <link>https://examplesite.com/tags/security/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
-      <guid>https://canix1.github.io/managedpriv.github.io/tags/security/</guid>
+      <guid>https://examplesite.com/tags/security/</guid>
       <description></description>
     </item>
     
