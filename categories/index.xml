@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Robin Graberg - Managed Privileges</title>
-    <link>https://canix1.github.io/managedpriv.github.io/categories/</link>
+    <link>https://managedpriv.com/categories/</link>
     <description>Recent content in Categories on Robin Graberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 07 Feb 2019 10:47:55 +0600</lastBuildDate>
     
-	<atom:link href="https://canix1.github.io/managedpriv.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://managedpriv.com/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>passwords</title>
-      <link>https://canix1.github.io/managedpriv.github.io/categories/passwords/</link>
+      <link>https://managedpriv.com/categories/passwords/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
-      <guid>https://canix1.github.io/managedpriv.github.io/categories/passwords/</guid>
+      <guid>https://managedpriv.com/categories/passwords/</guid>
       <description></description>
     </item>
     
