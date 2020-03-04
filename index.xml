@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Robin Graberg - Managed Privileges</title>
-    <link>/</link>
+    <link>https://managedpriv.com/</link>
     <description>Recent content on Robin Graberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 07 Feb 2019 10:47:55 +0600</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://managedpriv.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>AD ACL Scanner</title>
-      <link>/project/ad-acl-scanner/</link>
+      <link>https://managedpriv.com/project/ad-acl-scanner/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
-      <guid>/project/ad-acl-scanner/</guid>
+      <guid>https://managedpriv.com/project/ad-acl-scanner/</guid>
       <description>AD ACL Scanner Current version Version: 6.0
 9 February, 2020</description>
     </item>
     
     <item>
       <title>Do You Allow Blank Passwords In Your Environment</title>
-      <link>/blog/do-you-allow-blank-passwords-in-your-environment/</link>
+      <link>https://managedpriv.com/blog/do-you-allow-blank-passwords-in-your-environment/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
-      <guid>/blog/do-you-allow-blank-passwords-in-your-environment/</guid>
+      <guid>https://managedpriv.com/blog/do-you-allow-blank-passwords-in-your-environment/</guid>
       <description>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
     </item>
     
