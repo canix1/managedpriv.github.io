@@ -163,23 +163,24 @@
           <img src="https://managedpriv.com/images/blog/post-1.jpg"  onerror="this.src='https:\/\/managedpriv.com\/images\/blog\/post-1.webp'" alt="post thumb" class="img-fluid w-100">
            <div class="card-type">Passwords</div>
         </div>
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false"><img src="../../images/tweet.png" width="62" height="24"></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>        
         <div class="card-meta text-uppercase mb-2">by <strong class="text-dark">Robin Granberg</strong>/ on <strong class="text-dark">07 Feb 2019</strong></div>
         <h2>Do You Allow Blank Passwords In Your Environment</h2>
         <div class="content">
-          <p><!-- raw HTML omitted -->This is a repost of my previous post at the no longer existing blog<!-- raw HTML omitted -->http<!-- raw HTML omitted --><!-- raw HTML omitted -->://<!-- raw HTML omitted --><!-- raw HTML omitted -->blogs.technet.com/b/pfesweplat/archive/2012/12/11/do-you-allow-blank-passwords-in-your-environment.aspx<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+          <p>This is a repost of my previous post at: <a href="https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/do-you-allow-blank-passwords-in-your-domain">https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/do-you-allow-blank-passwords-in-your-domain</a>. My blog posts at Microsoft was temporarly deleted so just in case I re-post this one here.</p>
 <p>Do you or did you back in the days use your own code or a third party tool to create user accounts that did not update the userAccountControl attribute after the account was created?
 Well then there&rsquo;s a change you might have accounts in your domain that are allowed blank passwords or even worse have accounts with blank passwords!
  <!-- raw HTML omitted -->
 Why! Because user objects are allowed blank passwords by default when created, something that must be handle afterwards. Unless that&rsquo;s in line with your security policy ;)
  <!-- raw HTML omitted --></p>
 <p>This is the default setting of userAccountControl at user object creation:
-userAccountControl: 0x222 = (<!-- raw HTML omitted -->ACCOUNTDISABLE | PASSWD_NOTREQD | NORMAL_ACCOUNT<!-- raw HTML omitted -->);
+userAccountControl: 0x222 = (<strong>ACCOUNTDISABLE | PASSWD_NOTREQD | NORMAL_ACCOUNT</strong>);
  <!-- raw HTML omitted --></p>
 <h2 id="how-does-this-setting-affect-my-environment">How does this setting affect my environment?</h2>
 <!-- raw HTML omitted -->
-<p><!-- raw HTML omitted -->Q:<!-- raw HTML omitted --> We have a password policy in our domain that does not allow blank passwords, are we protected from blank passwords?
+<p><strong>Q:</strong> We have a password policy in our domain that does not allow blank passwords, are we protected from blank passwords?
  <!-- raw HTML omitted --></p>
-<p><!-- raw HTML omitted -->A:<!-- raw HTML omitted --> No, this setting overrides the password policy in the domain or your fine grained password policy when you do <!-- raw HTML omitted -->reset password<!-- raw HTML omitted --> operations.</p>
+<p><strong>A:</strong> No, this setting overrides the password policy in the domain or your fine grained password policy when you do <strong>reset password</strong> operations.</p>
 <!-- raw HTML omitted -->
 <p> 
 So when is the &ldquo;blank password&rdquo; setting on user accounts effective:</p>
@@ -187,7 +188,7 @@ So when is the &ldquo;blank password&rdquo; setting on user accounts effective:<
 <p>When users are delegated the permissions to do password resets on user accounts with ADS_UF_PASSWD_NOTREQD, they can set a blank password.</p>
 <!-- raw HTML omitted -->
 <p> 
-A normal change password procedure by a user do not follow the <!-- raw HTML omitted -->ADS_UF_PASSWD_NOTREQD<!-- raw HTML omitted -->, it will follow the password policy in your domain or fine grained password policy if you got defined for the user.</p>
+A normal change password procedure by a user do not follow the <strong>ADS_UF_PASSWD_NOTREQD</strong>, it will follow the password policy in your domain or fine grained password policy if you got defined for the user.</p>
 <!-- raw HTML omitted -->
 <p>So let say that an user with the delegate right to do password reset accidentally press OK in the password reset dialog box without the &ldquo;User must change password at next logon&rdquo; or someone in your organization with permissions to create user objects accentually runs a script that sets blank password.  Then you will have accounts in you domain with no password.
  <!-- raw HTML omitted --></p>
@@ -198,18 +199,18 @@ The easiest way to do it is to do a search with ADUC (Active Directory Users and
 <!-- raw HTML omitted -->
 <ol>
 <li>Right click the domain root.</li>
-<li>Select <!-- raw HTML omitted -->Find&hellip;.<!-- raw HTML omitted --></li>
-<li>In the Find: drop down box select <!-- raw HTML omitted -->Custom Search<!-- raw HTML omitted -->.</li>
-<li>Click the <!-- raw HTML omitted -->Advanced<!-- raw HTML omitted --> tab.</li>
-<li>In the <!-- raw HTML omitted -->Enter LDAP Query:<!-- raw HTML omitted --> field type: <!-- raw HTML omitted -->(&amp;(objectCategory=person)(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=32))<!-- raw HTML omitted -->.</li>
-<li>Click <!-- raw HTML omitted -->Find Now<!-- raw HTML omitted -->.</li>
+<li>Select <strong>Find&hellip;.</strong></li>
+<li>In the Find: drop down box select <strong>Custom Search</strong>.</li>
+<li>Click the <strong>Advanced</strong> tab.</li>
+<li>In the <strong>Enter LDAP Query:</strong> field type: <strong>(&amp;(objectCategory=person)(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=32))</strong>.</li>
+<li>Click <strong>Find Now</strong>.</li>
 </ol>
 <!-- raw HTML omitted -->
 <h2 id="how-to-create-users">How to create users</h2>
 <!-- raw HTML omitted -->
 <p>To create users without allowing blank passwords you must deal with the userAccountContol values:</p>
 <!-- raw HTML omitted -->
-<p>&ldquo;When a new user account is created, the <a href="https://docs.microsoft.com/en-us/windows/desktop/ADSchema/a-useraccountcontrol">userAccountControl</a>  attribute for the account automatically has the <!-- raw HTML omitted -->UF_PASSWD_NOTREQD<!-- raw HTML omitted --> flag set, which indicates that no password is required for the account. If the security policies of the domain that the account is created in requires a password for all user accounts, then the <!-- raw HTML omitted -->UF_PASSWD_NOTREQD<!-- raw HTML omitted --> flag must be removed from the userAccountControl attribute for the account.&rdquo;</p>
+<p>&ldquo;When a new user account is created, the <a href="https://docs.microsoft.com/en-us/windows/desktop/ADSchema/a-useraccountcontrol">userAccountControl</a>  attribute for the account automatically has the <strong>UF_PASSWD_NOTREQD</strong> flag set, which indicates that no password is required for the account. If the security policies of the domain that the account is created in requires a password for all user accounts, then the <strong>UF_PASSWD_NOTREQD</strong> flag must be removed from the userAccountControl attribute for the account.&rdquo;</p>
 <!-- raw HTML omitted -->
 <p>Here you can read on how to create user accounts:</p>
 <!-- raw HTML omitted -->
@@ -218,7 +219,7 @@ The easiest way to do it is to do a search with ADUC (Active Directory Users and
 <p>PASSWD_NOTREQD flag:</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
-<p>This Vbscript code example will create a user with UF_PASSWD_NOTREQD. <!-- raw HTML omitted -->The user will be allowed using blank passwords<!-- raw HTML omitted -->.</p>
+<p>This Vbscript code example will create a user with UF_PASSWD_NOTREQD. <strong>The user will be allowed using blank passwords</strong>.</p>
 <!-- raw HTML omitted -->
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Set</span> objOU <span style="color:#f92672">=</span> GetObject(<span style="color:#e6db74">&#34;LDAP://ou=sales,dc=contoso,dc=com&#34;</span>)
 <span style="color:#66d9ef">Set</span> objUser <span style="color:#f92672">=</span> objOU.Create(<span style="color:#e6db74">&#34;User&#34;</span>, <span style="color:#e6db74">&#34;cn=jsmith&#34;</span>)
@@ -251,12 +252,12 @@ objUser.SetInfo</code></pre></div>
 <!-- raw HTML omitted -->
 <p>Well, you can run a script to test every account against a blank password or why not find users with passwords that don&rsquo;t comply with the password policy and remove the user setting for other users at the same time? :)</p>
 <!-- raw HTML omitted -->
-<p>Here&rsquo;s a code-sample that remove the <!-- raw HTML omitted -->ADS_UF_PASSWD_NOTREQD<!-- raw HTML omitted -->. If a user has a blank password the script will report an error stating it does not follow the password policy for the domain, as long as you have a password policy in the domain that requires minimum length above zero characters.
+<p>Here&rsquo;s a code-sample that remove the <strong>ADS_UF_PASSWD_NOTREQD</strong>. If a user has a blank password the script will report an error stating it does not follow the password policy for the domain, as long as you have a password policy in the domain that requires minimum length above zero characters.
 If the script succeeds it will also report the status of the account, since if the account is also disabled it still could have a blank password.</p>
 <!-- raw HTML omitted -->
 <p>You could test your environment with this code-sample and review the output.</p>
 <!-- raw HTML omitted -->
-<p>Hopefully you do not have accounts with <!-- raw HTML omitted -->ADS_UF_PASSWD_NOTREQD<!-- raw HTML omitted -->. If you do you follow this procedure to find them.</p>
+<p>Hopefully you do not have accounts with <strong>ADS_UF_PASSWD_NOTREQD</strong>. If you do you follow this procedure to find them.</p>
 <!-- raw HTML omitted -->
 <p>You could still of course have accounts with blank passwords in case you had a domain password policy with no minimum password length. To remediate you have to make sure your password policies are in line with you security policy and that users are required to change their passwords and do not have &ldquo;Password never expires&rdquo; ticked in.</p>
 <!-- raw HTML omitted -->
@@ -296,6 +297,16 @@ If the script succeeds it will also report the status of the account, since if t
     <!-- post-item -->
     
     <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-alcs-part-1/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/powerfullaccounts.webp"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-alcs-part-1/">
+          <h5 class="mt-0">Finding Highly Privileged Accounts in ALC&#39;s - Part 1</h5>
+        </a>
+        27 Apr 2020
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
       <a href="https://managedpriv.com/blog/do-you-allow-blank-passwords-in-your-environment/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/post-1.webp"></a>
       <div class="media-body">
         <a href="https://managedpriv.com/blog/do-you-allow-blank-passwords-in-your-environment/">
@@ -310,6 +321,9 @@ If the script succeeds it will also report the status of the account, since if t
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Category</h4>
     <ul class="list-styled style-circle">
+      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">Acl</a></li>
+      <li class="border-bottom border-color"><a href="/categories/active-directory" class="text-color d-block pb-3 mt-3 text-decoration-none">Active directory</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad acl scanner</a></li>
       <li class="border-bottom border-color"><a href="/categories/passwords" class="text-color d-block pb-3 mt-3 text-decoration-none">Passwords</a></li>
     </ul>
   </div>
@@ -317,8 +331,11 @@ If the script succeeds it will also report the status of the account, since if t
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Tags</h4>
     <ul class="list-inline tag-list">
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">Acl</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/active-directory">Active directory</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/assessment">Assessment</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/password">Password</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/privileged-account">Privileged account</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/security">Security</a></li>
     </ul>
   </div>
@@ -377,21 +394,6 @@ If the script succeeds it will also report the status of the account, since if t
                 <li class="text-light mb-3"></li>
               </ul>
             </div>
-            
-            
-            <div class="col-12">
-              <h4 class="text-white mb-4">Subscribe Newsletter</h4>
-              <form action="https://gmail.us4.list-manage.com/subscribe/post?u=463ee871f45d2d93748e77cad&amp;amp;id=a0a2c6d074" method="post" name="mc-embedded-subscribe-form" target="_blank">
-                <div class="position-relative">
-                  <input type="email" class="form-control border-0 text-white newsletter-form" id="newsletter" name="newsletter" placeholder="Enter your email">
-                  <button type="submit" name="subscribe" class="btn btn-primary btn-subscribe">Subscribe</button>
-                  <div style="position: absolute; left: -5000px;" aria-hidden="true">
-                    <input type="text" name="b_463ee871f45d2d93748e77cad_a0a2c6d074" tabindex="-1">
-                  </div>
-                </div>
-              </form>
-            </div>
-            
             
           </div>
         </div>

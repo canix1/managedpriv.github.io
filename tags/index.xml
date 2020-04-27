@@ -6,17 +6,53 @@
     <description>Recent content in Tags on Robin Graberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 07 Feb 2019 10:47:55 +0600</lastBuildDate>
+    <lastBuildDate>Mon, 27 Apr 2020 10:47:55 +0600</lastBuildDate>
     
 	<atom:link href="https://managedpriv.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>ACL</title>
+      <link>https://managedpriv.com/tags/acl/</link>
+      <pubDate>Mon, 27 Apr 2020 10:47:55 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/tags/acl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>active directory</title>
       <link>https://managedpriv.com/tags/active-directory/</link>
-      <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
+      <pubDate>Mon, 27 Apr 2020 10:47:55 +0600</pubDate>
       
       <guid>https://managedpriv.com/tags/active-directory/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Assessment</title>
+      <link>https://managedpriv.com/tags/assessment/</link>
+      <pubDate>Mon, 27 Apr 2020 10:47:55 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/tags/assessment/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Privileged Account</title>
+      <link>https://managedpriv.com/tags/privileged-account/</link>
+      <pubDate>Mon, 27 Apr 2020 10:47:55 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/tags/privileged-account/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>security</title>
+      <link>https://managedpriv.com/tags/security/</link>
+      <pubDate>Mon, 27 Apr 2020 10:47:55 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/tags/security/</guid>
       <description></description>
     </item>
     
@@ -26,15 +62,6 @@
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
       <guid>https://managedpriv.com/tags/password/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>security</title>
-      <link>https://managedpriv.com/tags/security/</link>
-      <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
-      
-      <guid>https://managedpriv.com/tags/security/</guid>
       <description></description>
     </item>
     

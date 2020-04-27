@@ -6,10 +6,19 @@
     <description>Recent content in active directory on Robin Graberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 07 Feb 2019 10:47:55 +0600</lastBuildDate>
+    <lastBuildDate>Mon, 27 Apr 2020 10:47:55 +0600</lastBuildDate>
     
 	<atom:link href="https://managedpriv.com/tags/active-directory/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Finding Highly Privileged Accounts in ALC&#39;s - Part 1</title>
+      <link>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-alcs-part-1/</link>
+      <pubDate>Mon, 27 Apr 2020 10:47:55 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-alcs-part-1/</guid>
+      <description>When trying to identify the highly privileged accounts in an Active Directory you might start with the members of the built-in administrative groups like Domain Admin etc.</description>
+    </item>
     
     <item>
       <title>Do You Allow Blank Passwords In Your Environment</title>
@@ -17,7 +26,7 @@
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
       
       <guid>https://managedpriv.com/blog/do-you-allow-blank-passwords-in-your-environment/</guid>
-      <description>&lt;p&gt;&lt;!-- raw HTML omitted --&gt;This is a repost of my previous post at the no longer existing blog&lt;!-- raw HTML omitted --&gt;http&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;://&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;blogs.technet.com/b/pfesweplat/archive/2012/12/11/do-you-allow-blank-passwords-in-your-environment.aspx&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;This is a repost of my previous post at: &lt;a href=&#34;https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/do-you-allow-blank-passwords-in-your-domain&#34;&gt;https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/do-you-allow-blank-passwords-in-your-domain&lt;/a&gt;. My blog posts at Microsoft was temporarly deleted so just in case I re-post this one here.&lt;/p&gt;</description>
     </item>
     
   </channel>

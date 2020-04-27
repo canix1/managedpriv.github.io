@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ACL on Robin Graberg - Managed Privileges</title>
+    <link>https://managedpriv.com/categories/acl/</link>
+    <description>Recent content in ACL on Robin Graberg - Managed Privileges</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 27 Apr 2020 10:47:55 +0600</lastBuildDate>
+    
+	<atom:link href="https://managedpriv.com/categories/acl/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Finding Highly Privileged Accounts in ALC&#39;s - Part 1</title>
+      <link>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-alcs-part-1/</link>
+      <pubDate>Mon, 27 Apr 2020 10:47:55 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-alcs-part-1/</guid>
+      <description>When trying to identify the highly privileged accounts in an Active Directory you might start with the members of the built-in administrative groups like Domain Admin etc.</description>
+    </item>
+    
+  </channel>
+</rss>
