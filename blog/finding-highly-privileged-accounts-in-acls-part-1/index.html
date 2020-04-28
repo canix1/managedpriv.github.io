@@ -2,11 +2,11 @@
 
 <html lang="en-us"><head>
   <meta charset="utf-8">
-  <title>Do You Allow Blank Passwords In Your Environment</title>
+  <title>Finding Highly Privileged Accounts in ACL&#39;s - Part 1</title>
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="this is meta description for blog page.">
+  <meta name="description" content="Detecting powerfull accounts by ACL&#39;s">
   
   <meta name="author" content="robin granberg">
   <meta name="generator" content="Hugo 0.65.3" />
@@ -32,9 +32,9 @@
   <link rel="shortcut icon" href="https://managedpriv.com/images/favicon.png " type="image/x-icon">
   <link rel="icon" href="https://managedpriv.com/images/favicon.png " type="image/x-icon">
 
-  <meta property="og:title" content="Do You Allow Blank Passwords In Your Environment" />
-  <meta property="og:description" content="this is meta description for blog page." />
-  <meta property="og:image" content="https://managedpriv.com/images/blog/post-1.jpg"  />
+  <meta property="og:title" content="Finding Highly Privileged Accounts in ACL&#39;s - Part 1" />
+  <meta property="og:description" content="Detecting powerfull accounts by ACL&#39;s" />
+  <meta property="og:image" content="https://managedpriv.com/images/blog/powerfullaccounts.jpg"  />
 
 </head><body>
 <!-- preloader start -->
@@ -143,12 +143,12 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <h2 class="text-white mb-3">Do You Allow Blank Passwords In Your Environment</h2>
+        <h2 class="text-white mb-3">Finding Highly Privileged Accounts in ACL&#39;s - Part 1</h2>
         <!-- breadcrumb -->
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent p-0">
             <li class="breadcrumb-item font-weight-semebold"><a class="text-white" href="/">Home</a></li>
-            <li class="breadcrumb-item font-weight-semebold active text-primary" aria-current="page">Do You Allow Blank Passwords In Your Environment</li>
+            <li class="breadcrumb-item font-weight-semebold active text-primary" aria-current="page">Finding Highly Privileged Accounts in ACL&#39;s - Part 1</li>
           </ol>
         </nav>
       </div>
@@ -164,118 +164,85 @@
       <div class="col-lg-8">
         <!-- post thumb -->
         <div class="position-relative mb-5">
-          <img src="https://managedpriv.com/images/blog/post-1.jpg"  onerror="this.src='https:\/\/managedpriv.com\/images\/blog\/post-1.webp'" alt="post thumb" class="img-fluid w-100">
-           <div class="card-type">Passwords</div>
+          <img src="https://managedpriv.com/images/blog/powerfullaccounts.jpg"  onerror="this.src='https:\/\/managedpriv.com\/images\/blog\/powerfullaccounts.webp'" alt="post thumb" class="img-fluid w-100">
+           <div class="card-type">ACL</div>
         </div>
         <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false"><img src="../../images/tweet.png" width="62" height="24"></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>        
-        <div class="card-meta text-uppercase mb-2">by <strong class="text-dark">Robin Granberg</strong>/ on <strong class="text-dark">07 Feb 2019</strong></div>
-        <h2>Do You Allow Blank Passwords In Your Environment</h2>
+        <div class="card-meta text-uppercase mb-2">by <strong class="text-dark">Robin Granberg</strong>/ on <strong class="text-dark">27 Apr 2020</strong></div>
+        <h2>Finding Highly Privileged Accounts in ACL&#39;s - Part 1</h2>
         <div class="content">
-          <p>This is a repost of my previous post at: <a href="https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/do-you-allow-blank-passwords-in-your-domain">https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/do-you-allow-blank-passwords-in-your-domain</a>. My blog posts at Microsoft was temporarly deleted so just in case I re-post this one here.</p>
-<p>Do you or did you back in the days use your own code or a third party tool to create user accounts that did not update the userAccountControl attribute after the account was created?
-Well then there&rsquo;s a change you might have accounts in your domain that are allowed blank passwords or even worse have accounts with blank passwords!
- <!-- raw HTML omitted -->
-Why! Because user objects are allowed blank passwords by default when created, something that must be handle afterwards. Unless that&rsquo;s in line with your security policy ;)
- <!-- raw HTML omitted --></p>
-<p>This is the default setting of userAccountControl at user object creation:
-userAccountControl: 0x222 = (<strong>ACCOUNTDISABLE | PASSWD_NOTREQD | NORMAL_ACCOUNT</strong>);
- <!-- raw HTML omitted --></p>
-<h2 id="how-does-this-setting-affect-my-environment">How does this setting affect my environment?</h2>
-<!-- raw HTML omitted -->
-<p><strong>Q:</strong> We have a password policy in our domain that does not allow blank passwords, are we protected from blank passwords?
- <!-- raw HTML omitted --></p>
-<p><strong>A:</strong> No, this setting overrides the password policy in the domain or your fine grained password policy when you do <strong>reset password</strong> operations.</p>
-<!-- raw HTML omitted -->
-<p> 
-So when is the &ldquo;blank password&rdquo; setting on user accounts effective:</p>
-<!-- raw HTML omitted -->
-<p>When users are delegated the permissions to do password resets on user accounts with ADS_UF_PASSWD_NOTREQD, they can set a blank password.</p>
-<!-- raw HTML omitted -->
-<p> 
-A normal change password procedure by a user do not follow the <strong>ADS_UF_PASSWD_NOTREQD</strong>, it will follow the password policy in your domain or fine grained password policy if you got defined for the user.</p>
-<!-- raw HTML omitted -->
-<p>So let say that an user with the delegate right to do password reset accidentally press OK in the password reset dialog box without the &ldquo;User must change password at next logon&rdquo; or someone in your organization with permissions to create user objects accentually runs a script that sets blank password.  Then you will have accounts in you domain with no password.
- <!-- raw HTML omitted --></p>
-<h2 id="how-do-i-find-accounts-with-ads_uf_passwd_notreqd">How do I find accounts with ADS_UF_PASSWD_NOTREQD?</h2>
-<!-- raw HTML omitted -->
-<p>How will I know any of the accounts in my domain have &ldquo;password not required&rdquo; set?
-The easiest way to do it is to do a search with ADUC (Active Directory Users and Computers) mmc snap-in.</p>
-<!-- raw HTML omitted -->
-<ol>
-<li>Right click the domain root.</li>
-<li>Select <strong>Find&hellip;.</strong></li>
-<li>In the Find: drop down box select <strong>Custom Search</strong>.</li>
-<li>Click the <strong>Advanced</strong> tab.</li>
-<li>In the <strong>Enter LDAP Query:</strong> field type: <strong>(&amp;(objectCategory=person)(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=32))</strong>.</li>
-<li>Click <strong>Find Now</strong>.</li>
-</ol>
-<!-- raw HTML omitted -->
-<h2 id="how-to-create-users">How to create users</h2>
-<!-- raw HTML omitted -->
-<p>To create users without allowing blank passwords you must deal with the userAccountContol values:</p>
-<!-- raw HTML omitted -->
-<p>&ldquo;When a new user account is created, the <a href="https://docs.microsoft.com/en-us/windows/desktop/ADSchema/a-useraccountcontrol">userAccountControl</a>  attribute for the account automatically has the <strong>UF_PASSWD_NOTREQD</strong> flag set, which indicates that no password is required for the account. If the security policies of the domain that the account is created in requires a password for all user accounts, then the <strong>UF_PASSWD_NOTREQD</strong> flag must be removed from the userAccountControl attribute for the account.&rdquo;</p>
-<!-- raw HTML omitted -->
-<p>Here you can read on how to create user accounts:</p>
-<!-- raw HTML omitted -->
-<p><a href="https://docs.microsoft.com/en-us/windows/desktop/AD/creating-a-user">Creating a user (Windows)</a></p>
-<!-- raw HTML omitted -->
-<p>PASSWD_NOTREQD flag:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>This Vbscript code example will create a user with UF_PASSWD_NOTREQD. <strong>The user will be allowed using blank passwords</strong>.</p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Set</span> objOU <span style="color:#f92672">=</span> GetObject(<span style="color:#e6db74">&#34;LDAP://ou=sales,dc=contoso,dc=com&#34;</span>)
-<span style="color:#66d9ef">Set</span> objUser <span style="color:#f92672">=</span> objOU.Create(<span style="color:#e6db74">&#34;User&#34;</span>, <span style="color:#e6db74">&#34;cn=jsmith&#34;</span>)
-objUser.Put <span style="color:#e6db74">&#34;sAMAccountName&#34;</span>,<span style="color:#e6db74">&#34;jsmith&#34;</span>
-objUser.Put <span style="color:#e6db74">&#34;givenName&#34;</span>,<span style="color:#e6db74">&#34;james&#34;</span>
-objUser.SetInfo
-objUser.put <span style="color:#e6db74">&#34;userPrincipalName&#34;</span>,objUser.sAMAccountName <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;@contoso.com&#34;</span>
-objUser.AccountDisabled <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
-strPassword <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;P@ssW0rdPh@rse&#34;</span>
-objUser.SetPassword strPassword
-objUser.SetInfo</code></pre></div>
-<!-- raw HTML omitted -->
-<p>This Vbscript code example manage the userAccountControl attribute. It removes both the disabled state and &ldquo;password not required&rdquo; setting:</p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Set</span> objOU <span style="color:#f92672">=</span> GetObject(<span style="color:#e6db74">&#34;LDAP://ou=sales,dc=contoso,dc=com&#34;</span>)
-<span style="color:#66d9ef">Set</span> objUser <span style="color:#f92672">=</span> objOU.Create(<span style="color:#e6db74">&#34;User&#34;</span>, <span style="color:#e6db74">&#34;cn=jsmith&#34;</span>)
-objUser.Put <span style="color:#e6db74">&#34;sAMAccountName&#34;</span>,<span style="color:#e6db74">&#34;jsmith&#34;</span>
-objUser.Put <span style="color:#e6db74">&#34;givenName&#34;</span>,<span style="color:#e6db74">&#34;james&#34;</span>
-objUser.SetInfo
-objUser.put <span style="color:#e6db74">&#34;userPrincipalName&#34;</span>,objUser.sAMAccountName <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;@contoso.com&#34;</span>
-<span style="color:#66d9ef">Const</span> ADS_UF_ACCOUNT_DISABLE <span style="color:#f92672">=</span> 2
-<span style="color:#66d9ef">Const</span> ADS_UF_PASSWD_NOTREQD <span style="color:#f92672">=</span> 32
-intUAc <span style="color:#f92672">=</span> objUser.Get (<span style="color:#e6db74">&#34;userAccountControl&#34;</span>)
-objUser.put  <span style="color:#e6db74">&#34;userAccountControl&#34;</span>, intUAc <span style="color:#f92672">And</span> (<span style="color:#66d9ef">Not</span> ADS_UF_PASSWD_NOTREQD) <span style="color:#f92672">And</span> (<span style="color:#66d9ef">Not</span> ADS_UF_ACCOUNT_DISABLE)
-strPassword <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;P@ssW0rdPh@rse&#34;</span>
-objUser.SetPassword strPassword
-objUser.SetInfo</code></pre></div>
-<!-- raw HTML omitted -->
-<h2 id="how-do-i-know-if-i-got-blank-passwords-and-how-do-i-deal-with-it">How do I know if I got blank passwords and how do I deal with it?</h2>
-<!-- raw HTML omitted -->
-<p>Well, you can run a script to test every account against a blank password or why not find users with passwords that don&rsquo;t comply with the password policy and remove the user setting for other users at the same time? :)</p>
-<!-- raw HTML omitted -->
-<p>Here&rsquo;s a code-sample that remove the <strong>ADS_UF_PASSWD_NOTREQD</strong>. If a user has a blank password the script will report an error stating it does not follow the password policy for the domain, as long as you have a password policy in the domain that requires minimum length above zero characters.
-If the script succeeds it will also report the status of the account, since if the account is also disabled it still could have a blank password.</p>
-<!-- raw HTML omitted -->
-<p>You could test your environment with this code-sample and review the output.</p>
-<!-- raw HTML omitted -->
-<p>Hopefully you do not have accounts with <strong>ADS_UF_PASSWD_NOTREQD</strong>. If you do you follow this procedure to find them.</p>
-<!-- raw HTML omitted -->
-<p>You could still of course have accounts with blank passwords in case you had a domain password policy with no minimum password length. To remediate you have to make sure your password policies are in line with you security policy and that users are required to change their passwords and do not have &ldquo;Password never expires&rdquo; ticked in.</p>
-<!-- raw HTML omitted -->
+          <p>When trying to identify the highly privileged accounts in an Active Directory you might start with the members of the built-in administrative groups like Domain Admin etc. But you cannot stop there since there are many places you can grant accounts permissions and privileges throughout an Active Directory Forest. I will not list all possible locations where permissions can make an account a high value target for an attacker but instead focus on a method to detect highly privileged accounts in access control lists (ACL) on Active Directory objects.</p>
+<p>A long time ago I wrote a blog post on examples of these objects in Active Directory where you should pay extra attention:
+<a href="https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/forensics-active-directory-acl-investigation">https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/forensics-active-directory-acl-investigation</a></p>
+<p>Let&rsquo;s start off with an obvious example… the domain root. If a group of users has powerful permissions at the domain root they can practice their given right on all the objects below, except for the ones that are protected by <a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/dd3d29f3-8e1e-4e8c-a210-9eaef3abd628">AdminSDHolder</a>. Normally you do not need to delegate permission at this level, even though it&rsquo;s very common because it&rsquo;s convenient and easy. Best practice is to delegate permissions at the domain level that only can be delegated here and delegate all other permissions on an OU level, near the scope of management. For example a frequently used permission that can only be delegated at the domain level is &ldquo;Replicating Directory Changes&rdquo;, which some applications might require to keep a replicated copy of the directory.</p>
+<h3 id="objectives">Objectives</h3>
+<p>You want to keep your highly privileged accounts managed and to do that you need to identify them.</p>
+<p>One of the activities in doing that is to list accounts with critical permissions at the domain root.</p>
+<p><strong>1.</strong> Examine access control list and understand what permissions are critical.</p>
+<p><strong>2.</strong> Identify accounts and groups that are of importance for our assessment.</p>
+<p><strong>3.</strong> List explicit added accounts and accounts granted access by membership in nested groups.</p>
+<h3 id="filtering-aces">FILTERING ACE&rsquo;s</h3>
+<p>To do that you can use the <a href="https://github.com/canix1/ADACLScanner">AD ACL Scanner</a>. It has both a GUI and a command line mode, cool right? :)
+First, we will focus on using the command line mode since you easily can pipe the result to any other command you would like to use.</p>
+<p>Both the command line and the GUI support creating reports in CSV, HTML and EXCEL. For Excel reports you don&rsquo;t need to have Microsoft Office installed. Simply just install the PowerShell module <a href="https://github.com/dfinke/ImportExcel">ImportExcel</a> by <strong>Doug Finke</strong>. Thanks Doug!</p>
+<h4 id="powershell-command">PowerShell Command</h4>
+<p>If you run <a href="https://github.com/canix1/ADACLScanner">ADACLScan.ps1</a> without parameters it will launch the graphical interface, but if you add the properly selected parameters you will run in command mode.</p>
+<p>To run in command mode, you must add the <strong>-base</strong> (or the alias for the same <strong>-b</strong>) parameter and define a starting point using the distinguished name. I will use <strong>dc=contoso,dc=com</strong> which is the root of my domain.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -base <span style="color:#e6db74">&#34;dc=contoso,dc=com&#34;</span>
+</code></pre></div><p>Our objective is to find any unexpected user accounts with critical permissions on the domain level.</p>
+<p>To do that we run:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical | ft
+</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/Step1.webp" onerror="this.src='..\/..\/images\/blog\/Step1.png'" alt="post thumb">
+<p>And as you can see, we only received the critical permissions.</p>
+<p>But this result contains a lot of expected users and groups.</p>
+<p><em><strong>Can we exclude the default permissions? - Yes, we can!</strong></em></p>
+<p>Add the parameter <strong>-SkipDefaults</strong> to filter the result from default permissions.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults | ft
+</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step2.webp" onerror="this.src='..\/..\/images\/blog\/Step2.png'" alt="post thumb">
+Now we have a much shorter list to analyze. In our scenario we have good control of the built-in groups, so we are not interested in listing them here. Both <strong>Incoming Forest Trust Builders</strong> and <strong>Clonable Domain Controllers</strong> are groups we monitor and keep track of.</p>
+<p><em><strong>Can we ignore these built-in groups? - Sure!</strong></em></p>
+<p>Add the <strong>-SkipBuiltin</strong> parameter to the command and it will ignore built-in groups.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn | ft
+</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step3.webp" onerror="this.src='..\/..\/images\/blog\/Step3.png'" alt="post thumb">
+Ok, Now it&rsquo;s just some custom ACE&rsquo;s left. Wow, that&rsquo;s much easier. Right?</p>
+<p>Well, the result contains groups and we need to know what user accounts are critical to the domain root.</p>
+<p><strong>We need to know who is member of these groups&hellip; and the nested groups&hellip; and the groups nested of these&hellip; and so on&hellip; <em><strong>Sigh!</strong></em></strong></p>
+<p>Let&rsquo;s fix that! Just add <strong>-RecursiveFind</strong>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn -RecursiveFind | ft
+</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/Step4.webp" onerror="this.src='..\/..\/images\/blog\/Step4.png'" alt="post thumb">
+<p>Awesome, all highly privileged accounts are listed, although we got a couple of additional groups too.</p>
+<p>You can filter the recursive search to only return users (by default all objects are returned) in the nested group chain with <strong>-RecursiveObjectType user</strong>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn -RecursiveFind -RecursiveObjectType user | ft
+</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step5.webp" onerror="this.src='..\/..\/images\/blog\/Step5.png'" alt="post thumb">
+Maybe your results won&rsquo;t be this obvious, but the account name are often a starting point for digging deeper. In this case the user MaliciouseActor really sticks out :)</p>
+<h4 id="graphical-user-interface">GRAPHICAL USER INTERFACE</h4>
+<p>This clip shows how to do the same thing from the graphical user interface. It&rsquo;s really easy!</p>
+<p>Start <strong>ADACLScan.ps1</strong> by either right-clicking it and select <strong>Run with PowerShell</strong> or run the following in the PowerShell window:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1
+</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/highlyPrivilegedAccount_compressd.gif" onerror="this.src=''" alt="post thumb">
+<h3 id="summary">Summary</h3>
+<p>In this blog post I covered how to scan the domain root of a domain and identify the accounts you might otherwise have missed when listing highly privileged and sensitive accounts in your domain.</p>
+<p>You can of course run this command through the whole Active Directory, but it might take a while especially if you use excessive group nesting with groups that have many members.</p>
+<p>Don&rsquo;t stop with your built-in groups when assessing your environment. You will probably have users with critical permissions delegated without being member of these groups.</p>
+<p><em><strong>Keep your identities and credentials managed</strong></em></p>
+<h4 id="upcoming">Upcoming</h4>
+<p>Next blog post in this series will cover how to scan linked Group Policies.</p>
+
         </div>
         <!-- tags -->
         <div class="mb-3">
           <h5 class="d-inline-block mr-3">Tags:</h5>
           <ul class="list-inline d-inline-block">
             
-            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/security">security</a>,</li>
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/security">Security</a>,</li>
             
-            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/active%20directory">active directory</a>,</li>
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/active%20directory">Active directory</a>,</li>
             
-            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/password">password</a>,</li>
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/acl">ACL</a>,</li>
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/assessment">Assessment</a>,</li>
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/privileged%20account">Privileged Account</a>,</li>
             
           </ul>
         </div>
