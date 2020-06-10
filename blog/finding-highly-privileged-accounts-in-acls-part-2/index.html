@@ -2,7 +2,7 @@
 
 <html lang="en-us"><head>
   <meta charset="utf-8">
-  <title>Finding Highly Privileged Accounts in ACL&#39;s - Part 1</title>
+  <title>Finding Highly Privileged Accounts in ACL&#39;s - Part 2 - GROUP POLICY</title>
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -32,17 +32,17 @@
   <link rel="shortcut icon" href="https://managedpriv.com/images/favicon.png " type="image/x-icon">
   <link rel="icon" href="https://managedpriv.com/images/favicon.png " type="image/x-icon">
 
-  <meta property="og:title" content="Finding Highly Privileged Accounts in ACL&#39;s - Part 1" />
+  <meta property="og:title" content="Finding Highly Privileged Accounts in ACL&#39;s - Part 2 - GROUP POLICY" />
   <meta property="og:description" content="Detecting powerfull accounts by ACL&#39;s" />
-  <meta property="og:url" content="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/" />
-  <meta property="og:image" content="https://managedpriv.com/images/blog/powerfullaccounts.jpg" />
+  <meta property="og:url" content="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-2/" />
+  <meta property="og:image" content="https://managedpriv.com/images/blog/DefenseEvasion.jpg" />
   <meta property="og:image:alt" content="managedpriv.com" />
   <meta property="og:type" content="website" />
 
-  <meta name="twitter:title" content="Finding Highly Privileged Accounts in ACL&#39;s - Part 1">
+  <meta name="twitter:title" content="Finding Highly Privileged Accounts in ACL&#39;s - Part 2 - GROUP POLICY">
   <meta name="twitter:description" content="Detecting powerfull accounts by ACL&#39;s">
-  <meta name="twitter:image" content="https://managedpriv.com/images/blog/powerfullaccounts.jpg">
-  <meta name="twitter:card" content="https://managedpriv.com/images/blog/powerfullaccounts.jpg">
+  <meta name="twitter:image" content="https://managedpriv.com/images/blog/DefenseEvasion.jpg">
+  <meta name="twitter:card" content="https://managedpriv.com/images/blog/DefenseEvasion.jpg">
 
 </head><body>
 <!-- preloader start -->
@@ -151,12 +151,12 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <h2 class="text-white mb-3">Finding Highly Privileged Accounts in ACL&#39;s - Part 1</h2>
+        <h2 class="text-white mb-3">Finding Highly Privileged Accounts in ACL&#39;s - Part 2 - GROUP POLICY</h2>
         <!-- breadcrumb -->
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent p-0">
             <li class="breadcrumb-item font-weight-semebold"><a class="text-white" href="/">Home</a></li>
-            <li class="breadcrumb-item font-weight-semebold active text-primary" aria-current="page">Finding Highly Privileged Accounts in ACL&#39;s - Part 1</li>
+            <li class="breadcrumb-item font-weight-semebold active text-primary" aria-current="page">Finding Highly Privileged Accounts in ACL&#39;s - Part 2 - GROUP POLICY</li>
           </ol>
         </nav>
       </div>
@@ -172,75 +172,332 @@
       <div class="col-lg-8">
         <!-- post thumb -->
         <div class="position-relative mb-5">
-          <img src="https://managedpriv.com/images/blog/powerfullaccounts.jpg"  onerror="this.src='https:\/\/managedpriv.com\/images\/blog\/powerfullaccounts.webp'" alt="post thumb" class="img-fluid w-100">
+          <img src="https://managedpriv.com/images/blog/DefenseEvasion.jpg"  onerror="this.src='https:\/\/managedpriv.com\/images\/blog\/DefenseEvasion.webp'" alt="post thumb" class="img-fluid w-100">
            <div class="card-type">ACL</div>
         </div>
         <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false"><img src="../../images/tweet.png" width="62" height="24"></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>        
-        <div class="card-meta text-uppercase mb-2">by <strong class="text-dark">Robin Granberg</strong>/ on <strong class="text-dark">27 Apr 2020</strong></div>
-        <h2>Finding Highly Privileged Accounts in ACL&#39;s - Part 1</h2>
+        <div class="card-meta text-uppercase mb-2">by <strong class="text-dark">Robin Granberg</strong>/ on <strong class="text-dark">16 May 2020</strong></div>
+        <h2>Finding Highly Privileged Accounts in ACL&#39;s - Part 2 - GROUP POLICY</h2>
         <div class="content">
-          <p>When trying to identify the highly privileged accounts in an Active Directory you might start with the members of the built-in administrative groups like Domain Admin etc. But you cannot stop there since there are many places you can grant accounts permissions and privileges throughout an Active Directory Forest. I will not list all possible locations where permissions can make an account a high value target for an attacker but instead focus on a method to detect highly privileged accounts in access control lists (ACL) on Active Directory objects.</p>
-<p>A long time ago I wrote a blog post on examples of these objects in Active Directory where you should pay extra attention:
-<a href="https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/forensics-active-directory-acl-investigation">https://docs.microsoft.com/en-us/archive/blogs/pfesweplat/forensics-active-directory-acl-investigation</a></p>
-<p>Let&rsquo;s start off with an obvious example… the domain root. If a group of users has powerful permissions at the domain root they can practice their given right on all the objects below, except for the ones that are protected by <a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/dd3d29f3-8e1e-4e8c-a210-9eaef3abd628">AdminSDHolder</a>. Normally you do not need to delegate permission at this level, even though it&rsquo;s very common because it&rsquo;s convenient and easy. Best practice is to delegate permissions at the domain level that only can be delegated here and delegate all other permissions on an OU level, near the scope of management. For example a frequently used permission that can only be delegated at the domain level is &ldquo;Replicating Directory Changes&rdquo;, which some applications might require to keep a replicated copy of the directory.</p>
+          <p>In the previous post <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/">Part 1</a> I introduced a way to detect a malicious actor account in the access control list of the domain root. In this post I will show you how to identify persistence and privilege creep on a domain via Group Policy permissions.</p>
+<p>Group Policies controls your environment and settings so any control over a GPO linked to a scope of management that covers any computer or user gives the attacker an extremely powerful tool and possibilities to pursue the objectives.</p>
+<p>The most obvious locations where you should have monitoring turned on and absolute control of are:</p>
+<ul>
+<li>Domain root</li>
+<li>Domain Controllers organizational unit</li>
+</ul>
+<p>Any accounts having control over group policies at these locations owns the domain!
+These accounts are Tier 0 accounts and should be treated as the same.</p>
+<p>If you are not familiar with  the Tier Model and Active Directory you must read up on it.
+For mor information on the Tier Model see <a href="https://aka.ms/tiermodel">https://aka.ms/tiermodel</a></p>
 <h3 id="objectives">Objectives</h3>
-<p>You want to keep your highly privileged accounts managed and to do that you need to identify them.</p>
-<p>One of the activities in doing that is to list accounts with critical permissions at the domain root.</p>
-<p><strong>1.</strong> Examine access control list and understand what permissions are critical.</p>
-<p><strong>2.</strong> Identify accounts and groups that are of importance for our assessment.</p>
-<p><strong>3.</strong> List explicit added accounts and accounts granted access by membership in nested groups.</p>
-<h3 id="filtering-aces">FILTERING ACE&rsquo;s</h3>
-<p>To do that you can use the <a href="https://github.com/canix1/ADACLScanner">AD ACL Scanner</a>. It has both a GUI and a command line mode, cool right? :)
-First, we will focus on using the command line mode since you easily can pipe the result to any other command you would like to use.</p>
-<p>Both the command line and the GUI support creating reports in CSV, HTML and EXCEL. For Excel reports you don&rsquo;t need to have Microsoft Office installed. Simply just install the PowerShell module <a href="https://github.com/dfinke/ImportExcel">ImportExcel</a> by <strong>Doug Finke</strong>. Thanks Doug!</p>
-<h4 id="powershell-command">PowerShell Command</h4>
-<p>If you run <a href="https://github.com/canix1/ADACLScanner">ADACLScan.ps1</a> without parameters it will launch the graphical interface, but if you add the properly selected parameters you will run in command mode.</p>
-<p>To run in command mode, you must add the <strong>-base</strong> (or the alias for the same <strong>-b</strong>) parameter and define a starting point using the distinguished name. I will use <strong>dc=contoso,dc=com</strong> which is the root of my domain.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -base <span style="color:#e6db74">&#34;dc=contoso,dc=com&#34;</span>
-</code></pre></div><p>Our objective is to find any unexpected user accounts with critical permissions on the domain level.</p>
-<p>To do that we run:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical | ft
-</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/Step1.webp" onerror="this.src='..\/..\/images\/blog\/Step1.png'" alt="post thumb">
-<p>And as you can see, we only received the critical permissions.</p>
-<p>But this result contains a lot of expected users and groups.</p>
-<p><em><strong>Can we exclude the default permissions? - Yes, we can!</strong></em></p>
-<p>Add the parameter <strong>-SkipDefaults</strong> to filter the result from default permissions.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults | ft
-</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step2.webp" onerror="this.src='..\/..\/images\/blog\/Step2.png'" alt="post thumb">
-Now we have a much shorter list to analyze. In our scenario we have good control of the built-in groups, so we are not interested in listing them here. Both <strong>Incoming Forest Trust Builders</strong> and <strong>Clonable Domain Controllers</strong> are groups we monitor and keep track of.</p>
-<p><em><strong>Can we ignore these built-in groups? - Sure!</strong></em></p>
-<p>Add the <strong>-SkipBuiltin</strong> parameter to the command and it will ignore built-in groups.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn | ft
-</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step3.webp" onerror="this.src='..\/..\/images\/blog\/Step3.png'" alt="post thumb">
-Ok, Now it&rsquo;s just some custom ACE&rsquo;s left. Wow, that&rsquo;s much easier. Right?</p>
-<p>Well, the result contains groups and we need to know what user accounts are critical to the domain root.</p>
-<p><strong>We need to know who is member of these groups&hellip; and the nested groups&hellip; and the groups nested of these&hellip; and so on&hellip; <em><strong>Sigh!</strong></em></strong></p>
-<p>Let&rsquo;s fix that! Just add <strong>-RecursiveFind</strong>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn -RecursiveFind | ft
-</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/Step4.webp" onerror="this.src='..\/..\/images\/blog\/Step4.png'" alt="post thumb">
-<p>Awesome, all highly privileged accounts are listed, although we got a couple of additional groups too.</p>
-<p>You can filter the recursive search to only return users (by default all objects are returned) in the nested group chain with <strong>-RecursiveObjectType user</strong>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn -RecursiveFind -RecursiveObjectType user | ft
-</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step5.webp" onerror="this.src='..\/..\/images\/blog\/Step5.png'" alt="post thumb">
-Maybe your results won&rsquo;t be this obvious, but the account name are often a starting point for digging deeper. In this case the user MaliciouseActor really sticks out :)</p>
-<h4 id="graphical-user-interface">GRAPHICAL USER INTERFACE</h4>
-<p>This clip shows how to do the same thing from the graphical user interface. It&rsquo;s really easy!</p>
-<p>Start <strong>ADACLScan.ps1</strong> by either right-clicking it and select <strong>Run with PowerShell</strong> or run the following in the PowerShell window:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1
-</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/highlyPrivilegedAccount_compressd.gif" onerror="this.src=''" alt="post thumb">
+<ul>
+<li>
+<p>Detect defense evasion via Group Policy Modification (<strong>MITTRE ATT&amp;CK</strong> <a href="https://attack.mitre.org/techniques/T1484"><strong>T1484</strong>)</a></p>
+</li>
+<li>
+<p>Identify gaps in the principle of least privilege <strong>NIST</strong> <a href="https://nvd.nist.gov/800-53/Rev4/control/AC-6"><strong>AC-6 (5)</strong></a></p>
+</li>
+</ul>
+<h3 id="group-policy-objects">GROUP POLICY OBJECTS</h3>
+<p>Group Polices are objects in Active Directory and has access control list like all the objects in Active Directory.</p>
+<p>What are the default permissions of a GPO you might wonder?
+Here&rsquo;s the default permissions the group policy gets at creation, this is the value of the DefaultSecurityDescriptor attribute in the Schema of Active Directory:</p>
+<pre><code>Dn: CN=Group-Policy-Container,CN=Schema,CN=Configuration,DC=contoso,DC=com
+defaultSecurityDescriptor: D:P(A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;DA)(A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;EA)
+(A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;CO)(A;CI;RPWPCCDCLCLORCWOWDSDDTSW;;;SY)(A;CI;RPLCLORC;;;AU)(OA;CI;CR;edacfd8f-ffb3-11d1-b41d-00a0c968f939;;AU)(A;CI;LCRPLORC;;;ED); 
+</code></pre><p><a href="../../images/blog/GPOdefSD.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOdefSD.webp" onerror="this.src='..\/..\/images\/blog\/GPOdefSD.png'" alt="post thumb"></a></p>
+<p>Ok, conclusions on this.
+The creator of the GPO will get full control and so does the Domain Admins, Enterprise Admins and System. Authenticated users can apply and read the GPO&rsquo;s by default. The forests domain controllers are assured read access on new GPOs.</p>
+<h3 id="advanced-hunting">ADVANCED HUNTING</h3>
+<p>Let&rsquo;s hunt for misconfigurations on GPO&rsquo;s linked to the Domain Controller OU.</p>
+<p>To do that we add the parameter <strong>-GPO</strong> to <a href="https://github.com/canix1/ADACLScanner">ADACLScan.ps1</a></p>
+<p>We want only to see critical permissions.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical | ft
+</code></pre></div><p><a href="../../images/blog/GPOPermStep1.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep1.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep1.png'" alt="post thumb"></a></p>
+<p>The result contains a lot of expected permissions but also missing out an important part of the security decscriptor… The Owner.</p>
+<p>Time to filter out expected permissions and include the owner</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical -SkipDefaults -SkipBuiltIn -Owner | ft
+</code></pre></div><p><a href="../../images/blog/GPOPermStep2.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep2.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep2.png'" alt="post thumb"></a></p>
+<p>We just identified an attempted Defense Evasion (<strong>MITTRE ATT&amp;CK ID</strong>:<a href="https://attack.mitre.org/techniques/T1484/"><strong>T1484</strong></a>).</p>
+<p>The account <strong>CONTOSO\APT29</strong> can perform malicious GPO modifications like Scheduled Task, Disabling Security Tools, Remote File Copy, Create Account, Service Execution and more.</p>
+<h4 id="remediation-action">Remediation action</h4>
+<p>Replace the owner on <strong>WSUS Patch Schedule 1</strong> with Domain Admins.</p>
+<p>Let us continue analyzing the ACL.</p>
+<p><strong>WSUS Admins</strong> is a group and we need to know what accounts are members and the nested groups. Add <strong>-RecursiveFind</strong> to the command.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical -SkipDefaults -SkipBuiltIn -Owner  -RecursiveFind | ft
+</code></pre></div><p><a href="../../images/blog/GPOPermStep3.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep3.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep3.png'" alt="post thumb"></a></p>
+<p>We got two admins, <strong>Alice</strong> and <strong>Bob</strong>, but who is <strong>joe</strong>?</p>
+<p><a href="../../images/blog/GPOPermStep4.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep4.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep4.png'" alt="post thumb"></a></p>
+<p>It is our disgruntled employee Joe! There is a risk that Joe might take retaliatory actions by disrupting the business or stealing information.</p>
+<p>Joe is a member of the <strong>SCCM Admins</strong> that are nested in to the <strong>WSUS Admins</strong> group.
+We do not consider the <strong>SCCM Admins</strong> as &ldquo;Tier 0&rdquo; admins and it should not have control over Domain Controllers.</p>
+<p>What we got here is an example of privilege creep. We are not enforcing the principle of least-privilege <strong>NIST</strong> <a href="https://nvd.nist.gov/800-53/Rev4/control/AC-6"><strong>AC-6 (5)</strong></a> and we should look into our access management process to identify the gap in the process that led to this problem.</p>
+<h4 id="remediation-action-1">Remediation action</h4>
+<ol>
+<li>Remove <strong>SCCM Admins</strong> from <strong>WSUS Admins</strong>.</li>
+<li>Monitor for security group managent events in the security log on the domain controllers.</li>
+</ol>
+<h3 id="detection">DETECTION</h3>
+<p>Besides assessing your GPO&rsquo;s ACL, you should monitor for changes to group policy objects and privileged groups. Here&rsquo;s some examples of security events that are generated in your domain controller’s security log.</p>
+<h4 id="4662---audit-success---directory-service-access">4662 - Audit Success - Directory Service Access</h4>
+<p>Changing permissions on a group policy object</p>
+<table>
+<thead>
+<tr>
+<th>4662</th>
+<th>An operation was performed on an object.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subject:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Security ID:</td>
+<td>CONTOSO\administrator</td>
+</tr>
+<tr>
+<td>Account Name:</td>
+<td>Administrator</td>
+</tr>
+<tr>
+<td>Account Domain:</td>
+<td>CONTOSO</td>
+</tr>
+<tr>
+<td>Logon ID:</td>
+<td>0x1D144B7</td>
+</tr>
+<tr>
+<td><strong>Object:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Object Server:</td>
+<td>DS</td>
+</tr>
+<tr>
+<td>Object Type:</td>
+<td>groupPolicyContainer</td>
+</tr>
+<tr>
+<td>Object Name:</td>
+<td>CN={43708369-9B79-4035-AB85-94365CA23621},CN=Policies,CN=System,DC=contoso,DC=com</td>
+</tr>
+<tr>
+<td>Handle ID:</td>
+<td>0x0</td>
+</tr>
+<tr>
+<td><strong>Operation:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Operation Type:</td>
+<td>Object Access</td>
+</tr>
+<tr>
+<td>Accesses:</td>
+<td>WRITE_DAC</td>
+</tr>
+<tr>
+<td>Access Mask:</td>
+<td>0x40000</td>
+</tr>
+<tr>
+<td>Properties:</td>
+<td>WRITE_DAC	{f30e3bc2-9ff0-11d1-b603-0000f80367c1}</td>
+</tr>
+<tr>
+<td><strong>Additional Information:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Parameter 1:</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Parameter 2:</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5136---audit-success---directory-changes">5136 - Audit Success - Directory Changes</h4>
+<p>Modifying the security descriptor on a group policy object. This one is followed up with a Type: Value Deleted event.</p>
+<table>
+<thead>
+<tr>
+<th>5136</th>
+<th>A directory service object was modified.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subject:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Security ID:</td>
+<td>CONTOSO\administrator</td>
+</tr>
+<tr>
+<td>Account Name:</td>
+<td>Administrator</td>
+</tr>
+<tr>
+<td>Account Domain:</td>
+<td>CONTOSO</td>
+</tr>
+<tr>
+<td>Logon ID:</td>
+<td>0x1FD9905</td>
+</tr>
+<tr>
+<td><strong>Directory Service:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Name:</td>
+<td>contoso.com</td>
+</tr>
+<tr>
+<td>Type:</td>
+<td>Active Directory Domain Services</td>
+</tr>
+<tr>
+<td><strong>Object:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>DN:</td>
+<td>cn={43708369-9B79-4035-AB85-94365CA23621},cn=policies,cn=system,DC=contoso,DC=com</td>
+</tr>
+<tr>
+<td>GUID:</td>
+<td>CN={43708369-9B79-4035-AB85-94365CA23621},CN=Policies,CN=System,DC=contoso,DC=com</td>
+</tr>
+<tr>
+<td>Class:</td>
+<td>groupPolicyContainer</td>
+</tr>
+<tr>
+<td><strong>Attribute:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>LDAP Display Name:</td>
+<td>nTSecurityDescriptor</td>
+</tr>
+<tr>
+<td>Syntax (OID):</td>
+<td>2.5.5.15</td>
+</tr>
+<tr>
+<td>Value::</td>
+<td>O:DAG:DAD:PAI(OA;CI;CR;edacfd8f-ffb3-11d1-b41d-00a0c968f939;;AU)(A;;CCDCLCSWRPWPDTLOSDRCWDWO;;;DA)(A;CI;CCDCLCRPWPSDRCWDWO;;;S-1-5-21-2790215031-3985095115-3368729028-3611)(A;CI;CCDCLCRPWPSDRCWDWO;;;S-1-5-21-2790215031-3985095115-3368729028-3612)(A;CI;CCDCLCSWRPWPDTLOSDRCWDWO;;;DA)(A;CI;CCDCLCSWRPWPDTLOSDRCWDWO;;;S-1-5-21-2790215031-3985095115-3368729028-519)(A;CI;LCRPLORC;;;ED)(A;CI;LCRPLORC;;;AU)(A;CI;CCDCLCSWRPWPDTLOSDRCWDWO;;;SY)(A;CIIO;CCDCLCSWRPWPDTLOSDRCWDWO;;;CO)S:AI(OU;CIIDSA;WPWD;;f30e3bc2-9ff0-11d1-b603-0000f80367c1;WD)(OU;CIIOIDSA;WP;f30e3bbe-9ff0-11d1-b603-0000f80367c1;bf967aa5-0de6-11d0-a285-00aa003049e2;WD)(OU;CIIOIDSA;WP;f30e3bbf-9ff0-11d1-b603-0000f80367c1;bf967aa5-0de6-11d0-a285-00aa003049e2;WD)</td>
+</tr>
+<tr>
+<td><strong>Operation:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Type:</td>
+<td>Value Added</td>
+</tr>
+<tr>
+<td>Correlation ID:</td>
+<td>{33bbb60c-6de6-4edc-8408-65ff1f1319b9}</td>
+</tr>
+<tr>
+<td>Application Correlation ID:</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h4 id="4728---audit-success---security-group-management">4728 - Audit Success - Security Group Management</h4>
+<p>Adding a member to a global security group.</p>
+<table>
+<thead>
+<tr>
+<th>4728</th>
+<th>A member was added to a security-enabled global group.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subject:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Security ID:</td>
+<td>CONTOSO\administrator</td>
+</tr>
+<tr>
+<td>Account Name:</td>
+<td>Administrator</td>
+</tr>
+<tr>
+<td>Account Domain:</td>
+<td>CONTOSO</td>
+</tr>
+<tr>
+<td>Logon ID:</td>
+<td>0x1FD9905</td>
+</tr>
+<tr>
+<td><strong>Member:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Security ID:</td>
+<td>CONTOSO\SCCM Admins</td>
+</tr>
+<tr>
+<td>Account Name:</td>
+<td>CN=SCCM Admins,OU=CORP,DC=contoso,DC=com</td>
+</tr>
+<tr>
+<td><strong>Group:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Security ID:</td>
+<td>CONTOSO\WSUS Admins</td>
+</tr>
+<tr>
+<td>Group Name:</td>
+<td>WSUS Admins</td>
+</tr>
+<tr>
+<td>Group Domain:</td>
+<td>CONTOSO</td>
+</tr>
+<tr>
+<td><strong>Additional Information:</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Privileges:</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
 <h3 id="summary">Summary</h3>
-<p>In this blog post I covered how to scan the domain root of a domain and identify the accounts you might otherwise have missed when listing highly privileged and sensitive accounts in your domain.</p>
-<p>You can of course run this command through the whole Active Directory, but it might take a while especially if you use excessive group nesting with groups that have many members.</p>
-<p>Don&rsquo;t stop with your built-in groups when assessing your environment. You will probably have users with critical permissions delegated without being member of these groups.</p>
-<p><em><strong>Keep your identities and credentials managed</strong></em></p>
-<h4 id="upcoming">Upcoming</h4>
-<p>Next blog post in this series will cover how to scan linked Group Policies.</p>
+<p>We identified two examples of misconfiguration&rsquo;s in the security descriptor on group policy objects.</p>
+<p>First, we identified the persistence created with the account <strong>CONTOSO\APT29</strong>. Where the adversaries tried to maintain access, with the intention of escalating privileges on the domain and avoid detection throughout their compromise. The problem was the incorrect ownership in the security descriptor on a GPO linked to the domain controller OU.</p>
+<p>Secondly, we identified the privilege creep created by inappropriate nesting of security groups. The user <strong>joe</strong>, a disgruntled employee, had unintentional control over the domain controllers.</p>
+<h4 id="conclusion">Conclusion</h4>
+<p>Create clear picture of your current security posture and make sure your SIEM create incidents for modifications of sensitive ACL&rsquo;s and groups.</p>
 
         </div>
         <!-- tags -->
         <div class="mb-3">
           <h5 class="d-inline-block mr-3">Tags:</h5>
           <ul class="list-inline d-inline-block">
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/gpo">GPO</a>,</li>
             
             <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/security">Security</a>,</li>
             
