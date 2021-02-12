@@ -6,10 +6,37 @@
     <description>Recent content in Tags on Robin Granberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Jun 2020 15:58:12 +0600</lastBuildDate>
+    <lastBuildDate>Fri, 12 Feb 2021 12:45:32 +0600</lastBuildDate>
     
 	<atom:link href="https://managedpriv.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Azure AD</title>
+      <link>https://managedpriv.com/tags/azure-ad/</link>
+      <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/tags/azure-ad/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PIM</title>
+      <link>https://managedpriv.com/tags/pim/</link>
+      <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/tags/pim/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Privilege Access</title>
+      <link>https://managedpriv.com/tags/privilege-access/</link>
+      <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
+      
+      <guid>https://managedpriv.com/tags/privilege-access/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>ACL</title>
