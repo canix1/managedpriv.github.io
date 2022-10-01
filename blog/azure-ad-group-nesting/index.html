@@ -9,7 +9,7 @@
   <meta name="description" content="Explains how privileged access can introduce a new attack path">
   
   <meta name="author" content="robin granberg">
-  <meta name="generator" content="Hugo 0.65.3" />
+  <meta name="generator" content="Hugo 0.102.3" />
 
   <!-- plugins -->
   
@@ -182,8 +182,8 @@
 <p>These Azure AD groups are either security groups or Microsoft 365 groups, that have been enabled for <strong>Azure AD roles can be assigned to the group</strong>. What happens is that the group get its property <strong>isAssignableToRole</strong> set  to <strong>true</strong>.  You can only enable this feature while creating the group.</p>
 <h5 id="powershell-example">PowerShell example</h5>
 <p>Creating a Microsoft 365 group that is assignable to roles.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-AzureADMSGroup -DisplayName <span style="color:#e6db74">&#34;AAD M365 Group /w AAD Role&#34;</span> -Description <span style="color:#e6db74">&#34;This group is assigned to Helpdesk Administrator built-in role in Azure AD.&#34;</span> -MailEnabled $true -SecurityEnabled $true -MailNickName <span style="color:#e6db74">&#34;AADM365Group/wAADRole&#34;</span> -IsAssignableToRole $true
-</code></pre></div><table>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>New-AzureADMSGroup -DisplayName <span style="color:#e6db74">&#34;AAD M365 Group /w AAD Role&#34;</span> -Description <span style="color:#e6db74">&#34;This group is assigned to Helpdesk Administrator built-in role in Azure AD.&#34;</span> -MailEnabled $true -SecurityEnabled $true -MailNickName <span style="color:#e6db74">&#34;AADM365Group/wAADRole&#34;</span> -IsAssignableToRole $true
+</span></span></code></pre></div><table>
 <thead>
 <tr>
 <th>Note: Your PIM instance must have been upgraded to support privileged access groups.</th>
@@ -191,17 +191,17 @@
 </thead>
 </table>
 <p>Small extract of properties of a group with <strong>isAssignableToRole: true</strong></p>
-<pre><code>{
-&quot;id&quot;: &quot;909fdafa-1b1f-4ce3-8258-fba999a24ff9&quot;,  
-&quot;deletedDateTime&quot;: null,  
-&quot;classification&quot;: null,  
-&quot;createdDateTime&quot;: &quot;2020-10-27T12:16:02Z&quot;,  
-&quot;creationOptions&quot;: [],  
-&quot;description&quot;: null,  
-&quot;displayName&quot;: &quot;AAD M365 Group /w AAD Role&quot;,
-&quot;expirationDateTime&quot;: null,  
-&quot;groupTypes&quot;: [],  
-&quot;isAssignableToRole&quot;: true,  
+<pre tabindex="0"><code>{
+&#34;id&#34;: &#34;909fdafa-1b1f-4ce3-8258-fba999a24ff9&#34;,  
+&#34;deletedDateTime&#34;: null,  
+&#34;classification&#34;: null,  
+&#34;createdDateTime&#34;: &#34;2020-10-27T12:16:02Z&#34;,  
+&#34;creationOptions&#34;: [],  
+&#34;description&#34;: null,  
+&#34;displayName&#34;: &#34;AAD M365 Group /w AAD Role&#34;,
+&#34;expirationDateTime&#34;: null,  
+&#34;groupTypes&#34;: [],  
+&#34;isAssignableToRole&#34;: true,  
 }
 </code></pre><p>You cannot change this value after the group is created since its immutable.
 If you try to change this value for an existing group, you will get this error:<br>
@@ -233,105 +233,105 @@ I have found that Azure AD Custom Roles and Azure Custom Roles behave the same a
 <thead>
 <tr>
 <th>Possible member</th>
-<th align="center">AAD Role</th>
-<th align="right">Az Role</th>
-<th align="right">AAD Security Group</th>
-<th align="right">*AAD Security Group /W AAD Roles</th>
-<th align="right">AAD M365 Group</th>
-<th align="right">*AAD M365 Group /W AAD Roles</th>
-<th align="right">Synced Group</th>
+<th style="text-align:center">AAD Role</th>
+<th style="text-align:right">Az Role</th>
+<th style="text-align:right">AAD Security Group</th>
+<th style="text-align:right">*AAD Security Group /W AAD Roles</th>
+<th style="text-align:right">AAD M365 Group</th>
+<th style="text-align:right">*AAD M365 Group /W AAD Roles</th>
+<th style="text-align:right">Synced Group</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>User</td>
-<td align="center">P</td>
-<td align="right">P</td>
-<td align="right">D</td>
-<td align="right">P</td>
-<td align="right">D</td>
-<td align="right">P</td>
-<td align="right">-</td>
+<td style="text-align:center">P</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">D</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">D</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
 </tr>
 <tr>
 <td>Synced User</td>
-<td align="center">P</td>
-<td align="right">P</td>
-<td align="right">D</td>
-<td align="right">P</td>
-<td align="right">D</td>
-<td align="right">P</td>
-<td align="right">D</td>
+<td style="text-align:center">P</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">D</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">D</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">D</td>
 </tr>
 <tr>
 <td>AAD Role</td>
-<td align="center">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
 </tr>
 <tr>
 <td>AZ Role</td>
-<td align="center">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
-<td align="right">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">-</td>
 </tr>
 <tr>
 <td>ADD Security Group</td>
-<td align="center">-</td>
-<td align="right">P</td>
-<td align="right">D</td>
-<td align="right">P</td>
-<td align="right">-</td>
-<td align="right">P</td>
-<td align="right">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">D</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
 </tr>
 <tr>
 <td>AAD Security Group /W AAD Roles</td>
-<td align="center">P</td>
-<td align="right">P</td>
-<td align="right">D</td>
-<td align="right">P</td>
-<td align="right">-</td>
-<td align="right">P</td>
-<td align="right">-</td>
+<td style="text-align:center">P</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">D</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
 </tr>
 <tr>
 <td>AAD M365 Group</td>
-<td align="center">-</td>
-<td align="right">P</td>
-<td align="right">-</td>
-<td align="right">P</td>
-<td align="right">-</td>
-<td align="right">P</td>
-<td align="right">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
 </tr>
 <tr>
 <td>AAD M365 Group /W AAD Roles</td>
-<td align="center">P</td>
-<td align="right">P</td>
-<td align="right">-</td>
-<td align="right">P</td>
-<td align="right">-</td>
-<td align="right">P</td>
-<td align="right">-</td>
+<td style="text-align:center">P</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
 </tr>
 <tr>
 <td>Synced Group</td>
-<td align="center">-</td>
-<td align="right">P</td>
-<td align="right">D</td>
-<td align="right">P</td>
-<td align="right">-</td>
-<td align="right">P</td>
-<td align="right">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">D</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">P</td>
+<td style="text-align:right">-</td>
 </tr>
 </tbody>
 </table>
@@ -363,7 +363,7 @@ I have found that Azure AD Custom Roles and Azure Custom Roles behave the same a
 </thead>
 </table>
 <p><strong>This is not true!</strong></p>
-<p>There are in fact <strong>4</strong> <strong>Global Administrator</strong>&lsquo;s.</p>
+<p>There are in fact <strong>4</strong> <strong>Global Administrator</strong>&rsquo;s.</p>
 <p>1 permanent account and 3 eligible accounts.</p>
 <p>Let us go through why.</p>
 <p>The account <strong>myga</strong> is a permanent member of <strong>Global Administrator</strong>, which is visualized by PIM’s dashboard.</p>
@@ -490,6 +490,16 @@ The nesting is not calculated in the PIM dashboard.</p>
     <!-- post-item -->
     
     <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/securing-the-forest-boundary/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/ProtectForestTrust.webp"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/securing-the-forest-boundary/">
+          <h5 class="mt-0">Securing the forest boundary</h5>
+        </a>
+        01 Oct 2022
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
       <a href="https://managedpriv.com/blog/azure-ad-group-nesting/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/PIMAdmin.webp"></a>
       <div class="media-body">
         <a href="https://managedpriv.com/blog/azure-ad-group-nesting/">
@@ -509,25 +519,17 @@ The nesting is not calculated in the PIM dashboard.</p>
       </div>
     </div>
     
-    <div class="media border-bottom border-color pb-3 mb-3">
-      <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/powerfullaccounts.webp"></a>
-      <div class="media-body">
-        <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/">
-          <h5 class="mt-0">Finding Highly Privileged Accounts in ACL&#39;s - Part 1</h5>
-        </a>
-        27 Apr 2020
-      </div>
-    </div>
-    
   </div>
   <!-- categories -->
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Category</h4>
     <ul class="list-styled style-circle">
-      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">Acl</a></li>
+      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">ACL</a></li>
       <li class="border-bottom border-color"><a href="/categories/active-directory" class="text-color d-block pb-3 mt-3 text-decoration-none">Active directory</a></li>
-      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad acl scanner</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad ACL scanner</a></li>
       <li class="border-bottom border-color"><a href="/categories/azure-ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Azure ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/forest-security-boundary" class="text-color d-block pb-3 mt-3 text-decoration-none">Forest security boundary</a></li>
       <li class="border-bottom border-color"><a href="/categories/gpo" class="text-color d-block pb-3 mt-3 text-decoration-none">Gpo</a></li>
       <li class="border-bottom border-color"><a href="/categories/passwords" class="text-color d-block pb-3 mt-3 text-decoration-none">Passwords</a></li>
       <li class="border-bottom border-color"><a href="/categories/privilege-identity-management" class="text-color d-block pb-3 mt-3 text-decoration-none">Privilege identity management</a></li>
@@ -537,16 +539,20 @@ The nesting is not calculated in the PIM dashboard.</p>
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Tags</h4>
     <ul class="list-inline tag-list">
-      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">Acl</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">ACL</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/active-directory">Active directory</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/ad">Ad</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/assessment">Assessment</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/azure-ad">Azure ad</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/forest">Forest</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/gpo">Gpo</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/password">Password</a></li>
-      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">Pim</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">PIM</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/privilege-access">Privilege access</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/privileged-account">Privileged account</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/security">Security</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust">Trust</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust-account">Trust account</a></li>
     </ul>
   </div>
 </aside>

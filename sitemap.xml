@@ -1,156 +1,115 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
+    <loc>https://managedpriv.com/tags/ad/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/categories/ad/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/blog/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/categories/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/tags/forest/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/categories/forest-security-boundary/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/blog/securing-the-forest-boundary/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/tags/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/tags/trust/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/tags/trust-account/</loc>
+    <lastmod>2022-10-01T12:45:32+06:00</lastmod>
+  </url><url>
     <loc>https://managedpriv.com/tags/azure-ad/</loc>
     <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/categories/azure-ad/</loc>
     <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://managedpriv.com/blog/</loc>
-    <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://managedpriv.com/categories/</loc>
-    <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/blog/azure-ad-group-nesting/</loc>
     <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/pim/</loc>
     <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/privilege-access/</loc>
     <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/categories/privilege-identity-management/</loc>
     <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://managedpriv.com/</loc>
-    <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://managedpriv.com/tags/</loc>
-    <lastmod>2021-02-12T12:45:32+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/acl/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/categories/acl/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://managedpriv.com/categories/active-directory/</loc>
-    <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/active-directory/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://managedpriv.com/categories/active-directory/</loc>
+    <lastmod>2020-06-10T15:58:12+06:00</lastmod>
+  </url><url>
     <loc>https://managedpriv.com/categories/ad-acl-scanner/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/assessment/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-2/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/gpo/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/categories/gpo/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/privileged-account/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/security/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/</loc>
     <lastmod>2020-04-27T10:47:55+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/project/ad-acl-scanner/</loc>
     <lastmod>2019-02-07T10:47:55+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/blog/do-you-allow-blank-passwords-in-your-environment/</loc>
     <lastmod>2019-02-07T10:47:55+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/tags/password/</loc>
     <lastmod>2019-02-07T10:47:55+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/categories/passwords/</loc>
     <lastmod>2019-02-07T10:47:55+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/project/</loc>
     <lastmod>2019-02-07T10:47:55+06:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/about/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/contact/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/search/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://managedpriv.com/service/</loc>
   </url>
-  
 </urlset>

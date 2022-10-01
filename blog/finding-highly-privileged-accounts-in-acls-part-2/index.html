@@ -9,7 +9,7 @@
   <meta name="description" content="Detecting powerfull accounts by ACL&#39;s">
   
   <meta name="author" content="robin granberg">
-  <meta name="generator" content="Hugo 0.65.3" />
+  <meta name="generator" content="Hugo 0.102.3" />
 
   <!-- plugins -->
   
@@ -199,7 +199,7 @@ For more information on the Tier Model see <a href="https://aka.ms/tiermodel">ht
 <p>Group Polices are objects in Active Directory and has access control list like all the objects in Active Directory.</p>
 <p>What are the default permissions of a GPO you might wonder?
 Here&rsquo;s the default permissions the group policy gets at creation, this is the value of the DefaultSecurityDescriptor attribute in the Schema of Active Directory:</p>
-<pre><code>Dn: CN=Group-Policy-Container,CN=Schema,CN=Configuration,DC=contoso,DC=com
+<pre tabindex="0"><code>Dn: CN=Group-Policy-Container,CN=Schema,CN=Configuration,DC=contoso,DC=com
 defaultSecurityDescriptor: D:P(A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;DA)(A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;EA)
 (A;CI;RPWPCCDCLCLOLORCWOWDSDDTSW;;;CO)(A;CI;RPWPCCDCLCLORCWOWDSDDTSW;;;SY)(A;CI;RPLCLORC;;;AU)(OA;CI;CR;edacfd8f-ffb3-11d1-b41d-00a0c968f939;;AU)(A;CI;LCRPLORC;;;ED); 
 </code></pre><p><a href="../../images/blog/GPOdefSD.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOdefSD.webp" onerror="this.src='..\/..\/images\/blog\/GPOdefSD.png'" alt="post thumb"></a></p>
@@ -209,20 +209,20 @@ The creator of the GPO will get full control and so does the Domain Admins, Ente
 <p>Let&rsquo;s hunt for misconfigurations on GPO&rsquo;s linked to the Domain Controller OU.</p>
 <p>To do that we add the parameter <strong>-GPO</strong> to <a href="https://github.com/canix1/ADACLScanner">ADACLScan.ps1</a></p>
 <p>We want only to see critical permissions.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical | ft
-</code></pre></div><p><a href="../../images/blog/GPOPermStep1.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep1.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep1.png'" alt="post thumb"></a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical | ft
+</span></span></code></pre></div><p><a href="../../images/blog/GPOPermStep1.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep1.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep1.png'" alt="post thumb"></a></p>
 <p>The result contains a lot of expected permissions but also missing out an important part of the security decscriptor… The Owner.</p>
 <p>Time to filter out expected permissions and include the owner</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical -SkipDefaults -SkipBuiltIn -Owner | ft
-</code></pre></div><p><a href="../../images/blog/GPOPermStep2.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep2.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep2.png'" alt="post thumb"></a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical -SkipDefaults -SkipBuiltIn -Owner | ft
+</span></span></code></pre></div><p><a href="../../images/blog/GPOPermStep2.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep2.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep2.png'" alt="post thumb"></a></p>
 <p>We just identified an attempted Defense Evasion (<strong>MITTRE ATT&amp;CK ID</strong>:<a href="https://attack.mitre.org/techniques/T1484/"><strong>T1484</strong></a>).</p>
 <p>The account <strong>CONTOSO\APT29</strong> can perform malicious GPO modifications like Scheduled Task, Disabling Security Tools, Remote File Copy, Create Account, Service Execution and more.</p>
 <h4 id="remediation-action">Remediation action</h4>
 <p>Replace the owner on <strong>WSUS Patch Schedule 1</strong> with Domain Admins.</p>
 <p>Let us continue analyzing the ACL.</p>
 <p><strong>WSUS Admins</strong> is a group and we need to know what accounts are members and the nested groups. Add <strong>-RecursiveFind</strong> to the command.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical -SkipDefaults -SkipBuiltIn -Owner  -RecursiveFind | ft
-</code></pre></div><p><a href="../../images/blog/GPOPermStep3.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep3.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep3.png'" alt="post thumb"></a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;OU=Domain Controllers,DC=contoso,DC=com&#34;</span> -GPO -Criticality Critical -SkipDefaults -SkipBuiltIn -Owner  -RecursiveFind | ft
+</span></span></code></pre></div><p><a href="../../images/blog/GPOPermStep3.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep3.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep3.png'" alt="post thumb"></a></p>
 <p>We got two admins, <strong>Alice</strong> and <strong>Bob</strong>, but who is <strong>joe</strong>?</p>
 <p><a href="../../images/blog/GPOPermStep4.png" title="Click to zoom"> <img class="img-fluid d-block mx-auto" src="../../images/blog/GPOPermStep4.webp" onerror="this.src='..\/..\/images\/blog\/GPOPermStep4.png'" alt="post thumb"></a></p>
 <p>It is our disgruntled employee Joe! There is a risk that Joe might take retaliatory actions by disrupting the business or stealing information.</p>
@@ -529,6 +529,16 @@ We do not consider the <strong>SCCM Admins</strong> as &ldquo;Tier 0&rdquo; admi
     <!-- post-item -->
     
     <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/securing-the-forest-boundary/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/ProtectForestTrust.webp"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/securing-the-forest-boundary/">
+          <h5 class="mt-0">Securing the forest boundary</h5>
+        </a>
+        01 Oct 2022
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
       <a href="https://managedpriv.com/blog/azure-ad-group-nesting/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/PIMAdmin.webp"></a>
       <div class="media-body">
         <a href="https://managedpriv.com/blog/azure-ad-group-nesting/">
@@ -548,25 +558,17 @@ We do not consider the <strong>SCCM Admins</strong> as &ldquo;Tier 0&rdquo; admi
       </div>
     </div>
     
-    <div class="media border-bottom border-color pb-3 mb-3">
-      <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/powerfullaccounts.webp"></a>
-      <div class="media-body">
-        <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/">
-          <h5 class="mt-0">Finding Highly Privileged Accounts in ACL&#39;s - Part 1</h5>
-        </a>
-        27 Apr 2020
-      </div>
-    </div>
-    
   </div>
   <!-- categories -->
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Category</h4>
     <ul class="list-styled style-circle">
-      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">Acl</a></li>
+      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">ACL</a></li>
       <li class="border-bottom border-color"><a href="/categories/active-directory" class="text-color d-block pb-3 mt-3 text-decoration-none">Active directory</a></li>
-      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad acl scanner</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad ACL scanner</a></li>
       <li class="border-bottom border-color"><a href="/categories/azure-ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Azure ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/forest-security-boundary" class="text-color d-block pb-3 mt-3 text-decoration-none">Forest security boundary</a></li>
       <li class="border-bottom border-color"><a href="/categories/gpo" class="text-color d-block pb-3 mt-3 text-decoration-none">Gpo</a></li>
       <li class="border-bottom border-color"><a href="/categories/passwords" class="text-color d-block pb-3 mt-3 text-decoration-none">Passwords</a></li>
       <li class="border-bottom border-color"><a href="/categories/privilege-identity-management" class="text-color d-block pb-3 mt-3 text-decoration-none">Privilege identity management</a></li>
@@ -576,16 +578,20 @@ We do not consider the <strong>SCCM Admins</strong> as &ldquo;Tier 0&rdquo; admi
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Tags</h4>
     <ul class="list-inline tag-list">
-      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">Acl</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">ACL</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/active-directory">Active directory</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/ad">Ad</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/assessment">Assessment</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/azure-ad">Azure ad</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/forest">Forest</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/gpo">Gpo</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/password">Password</a></li>
-      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">Pim</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">PIM</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/privilege-access">Privilege access</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/privileged-account">Privileged account</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/security">Security</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust">Trust</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust-account">Trust account</a></li>
     </ul>
   </div>
 </aside>

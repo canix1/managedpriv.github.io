@@ -6,11 +6,7 @@
     <description>Recent content in GPO on Robin Granberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Jun 2020 15:58:12 +0600</lastBuildDate>
-    
-	<atom:link href="https://managedpriv.com/tags/gpo/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 10 Jun 2020 15:58:12 +0600</lastBuildDate><atom:link href="https://managedpriv.com/tags/gpo/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Finding Highly Privileged Accounts in ACL&#39;s - Part 2 - GROUP POLICY</title>
       <link>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-2/</link>

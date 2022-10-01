@@ -9,7 +9,7 @@
   <meta name="description" content="this is meta description for blog page.">
   
   <meta name="author" content="robin granberg">
-  <meta name="generator" content="Hugo 0.65.3" />
+  <meta name="generator" content="Hugo 0.102.3" />
 
   <!-- plugins -->
   
@@ -229,32 +229,32 @@ The easiest way to do it is to do a search with ADUC (Active Directory Users and
 <!-- raw HTML omitted -->
 <p>This Vbscript code example will create a user with UF_PASSWD_NOTREQD. <strong>The user will be allowed using blank passwords</strong>.</p>
 <!-- raw HTML omitted -->
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Set</span> objOU <span style="color:#f92672">=</span> GetObject(<span style="color:#e6db74">&#34;LDAP://ou=sales,dc=contoso,dc=com&#34;</span>)
-<span style="color:#66d9ef">Set</span> objUser <span style="color:#f92672">=</span> objOU.Create(<span style="color:#e6db74">&#34;User&#34;</span>, <span style="color:#e6db74">&#34;cn=jsmith&#34;</span>)
-objUser.Put <span style="color:#e6db74">&#34;sAMAccountName&#34;</span>,<span style="color:#e6db74">&#34;jsmith&#34;</span>
-objUser.Put <span style="color:#e6db74">&#34;givenName&#34;</span>,<span style="color:#e6db74">&#34;james&#34;</span>
-objUser.SetInfo
-objUser.put <span style="color:#e6db74">&#34;userPrincipalName&#34;</span>,objUser.sAMAccountName <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;@contoso.com&#34;</span>
-objUser.AccountDisabled <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
-strPassword <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;P@ssW0rdPh@rse&#34;</span>
-objUser.SetPassword strPassword
-objUser.SetInfo</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vb" data-lang="vb"><span style="display:flex;"><span><span style="color:#66d9ef">Set</span> objOU <span style="color:#f92672">=</span> GetObject(<span style="color:#e6db74">&#34;LDAP://ou=sales,dc=contoso,dc=com&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Set</span> objUser <span style="color:#f92672">=</span> objOU.Create(<span style="color:#e6db74">&#34;User&#34;</span>, <span style="color:#e6db74">&#34;cn=jsmith&#34;</span>)
+</span></span><span style="display:flex;"><span>objUser.Put <span style="color:#e6db74">&#34;sAMAccountName&#34;</span>,<span style="color:#e6db74">&#34;jsmith&#34;</span>
+</span></span><span style="display:flex;"><span>objUser.Put <span style="color:#e6db74">&#34;givenName&#34;</span>,<span style="color:#e6db74">&#34;james&#34;</span>
+</span></span><span style="display:flex;"><span>objUser.SetInfo
+</span></span><span style="display:flex;"><span>objUser.put <span style="color:#e6db74">&#34;userPrincipalName&#34;</span>,objUser.sAMAccountName <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;@contoso.com&#34;</span>
+</span></span><span style="display:flex;"><span>objUser.AccountDisabled <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>strPassword <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;P@ssW0rdPh@rse&#34;</span>
+</span></span><span style="display:flex;"><span>objUser.SetPassword strPassword
+</span></span><span style="display:flex;"><span>objUser.SetInfo</span></span></code></pre></div>
 <!-- raw HTML omitted -->
 <p>This Vbscript code example manage the userAccountControl attribute. It removes both the disabled state and &ldquo;password not required&rdquo; setting:</p>
 <!-- raw HTML omitted -->
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Set</span> objOU <span style="color:#f92672">=</span> GetObject(<span style="color:#e6db74">&#34;LDAP://ou=sales,dc=contoso,dc=com&#34;</span>)
-<span style="color:#66d9ef">Set</span> objUser <span style="color:#f92672">=</span> objOU.Create(<span style="color:#e6db74">&#34;User&#34;</span>, <span style="color:#e6db74">&#34;cn=jsmith&#34;</span>)
-objUser.Put <span style="color:#e6db74">&#34;sAMAccountName&#34;</span>,<span style="color:#e6db74">&#34;jsmith&#34;</span>
-objUser.Put <span style="color:#e6db74">&#34;givenName&#34;</span>,<span style="color:#e6db74">&#34;james&#34;</span>
-objUser.SetInfo
-objUser.put <span style="color:#e6db74">&#34;userPrincipalName&#34;</span>,objUser.sAMAccountName <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;@contoso.com&#34;</span>
-<span style="color:#66d9ef">Const</span> ADS_UF_ACCOUNT_DISABLE <span style="color:#f92672">=</span> 2
-<span style="color:#66d9ef">Const</span> ADS_UF_PASSWD_NOTREQD <span style="color:#f92672">=</span> 32
-intUAc <span style="color:#f92672">=</span> objUser.Get (<span style="color:#e6db74">&#34;userAccountControl&#34;</span>)
-objUser.put  <span style="color:#e6db74">&#34;userAccountControl&#34;</span>, intUAc <span style="color:#f92672">And</span> (<span style="color:#66d9ef">Not</span> ADS_UF_PASSWD_NOTREQD) <span style="color:#f92672">And</span> (<span style="color:#66d9ef">Not</span> ADS_UF_ACCOUNT_DISABLE)
-strPassword <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;P@ssW0rdPh@rse&#34;</span>
-objUser.SetPassword strPassword
-objUser.SetInfo</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vb" data-lang="vb"><span style="display:flex;"><span><span style="color:#66d9ef">Set</span> objOU <span style="color:#f92672">=</span> GetObject(<span style="color:#e6db74">&#34;LDAP://ou=sales,dc=contoso,dc=com&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Set</span> objUser <span style="color:#f92672">=</span> objOU.Create(<span style="color:#e6db74">&#34;User&#34;</span>, <span style="color:#e6db74">&#34;cn=jsmith&#34;</span>)
+</span></span><span style="display:flex;"><span>objUser.Put <span style="color:#e6db74">&#34;sAMAccountName&#34;</span>,<span style="color:#e6db74">&#34;jsmith&#34;</span>
+</span></span><span style="display:flex;"><span>objUser.Put <span style="color:#e6db74">&#34;givenName&#34;</span>,<span style="color:#e6db74">&#34;james&#34;</span>
+</span></span><span style="display:flex;"><span>objUser.SetInfo
+</span></span><span style="display:flex;"><span>objUser.put <span style="color:#e6db74">&#34;userPrincipalName&#34;</span>,objUser.sAMAccountName <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;@contoso.com&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Const</span> ADS_UF_ACCOUNT_DISABLE <span style="color:#f92672">=</span> 2
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Const</span> ADS_UF_PASSWD_NOTREQD <span style="color:#f92672">=</span> 32
+</span></span><span style="display:flex;"><span>intUAc <span style="color:#f92672">=</span> objUser.Get (<span style="color:#e6db74">&#34;userAccountControl&#34;</span>)
+</span></span><span style="display:flex;"><span>objUser.put  <span style="color:#e6db74">&#34;userAccountControl&#34;</span>, intUAc <span style="color:#f92672">And</span> (<span style="color:#66d9ef">Not</span> ADS_UF_PASSWD_NOTREQD) <span style="color:#f92672">And</span> (<span style="color:#66d9ef">Not</span> ADS_UF_ACCOUNT_DISABLE)
+</span></span><span style="display:flex;"><span>strPassword <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;P@ssW0rdPh@rse&#34;</span>
+</span></span><span style="display:flex;"><span>objUser.SetPassword strPassword
+</span></span><span style="display:flex;"><span>objUser.SetInfo</span></span></code></pre></div>
 <!-- raw HTML omitted -->
 <h2 id="how-do-i-know-if-i-got-blank-passwords-and-how-do-i-deal-with-it">How do I know if I got blank passwords and how do I deal with it?</h2>
 <!-- raw HTML omitted -->
@@ -305,6 +305,16 @@ If the script succeeds it will also report the status of the account, since if t
     <!-- post-item -->
     
     <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/securing-the-forest-boundary/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/ProtectForestTrust.webp"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/securing-the-forest-boundary/">
+          <h5 class="mt-0">Securing the forest boundary</h5>
+        </a>
+        01 Oct 2022
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
       <a href="https://managedpriv.com/blog/azure-ad-group-nesting/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/PIMAdmin.webp"></a>
       <div class="media-body">
         <a href="https://managedpriv.com/blog/azure-ad-group-nesting/">
@@ -324,25 +334,17 @@ If the script succeeds it will also report the status of the account, since if t
       </div>
     </div>
     
-    <div class="media border-bottom border-color pb-3 mb-3">
-      <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/powerfullaccounts.webp"></a>
-      <div class="media-body">
-        <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/">
-          <h5 class="mt-0">Finding Highly Privileged Accounts in ACL&#39;s - Part 1</h5>
-        </a>
-        27 Apr 2020
-      </div>
-    </div>
-    
   </div>
   <!-- categories -->
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Category</h4>
     <ul class="list-styled style-circle">
-      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">Acl</a></li>
+      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">ACL</a></li>
       <li class="border-bottom border-color"><a href="/categories/active-directory" class="text-color d-block pb-3 mt-3 text-decoration-none">Active directory</a></li>
-      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad acl scanner</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad ACL scanner</a></li>
       <li class="border-bottom border-color"><a href="/categories/azure-ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Azure ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/forest-security-boundary" class="text-color d-block pb-3 mt-3 text-decoration-none">Forest security boundary</a></li>
       <li class="border-bottom border-color"><a href="/categories/gpo" class="text-color d-block pb-3 mt-3 text-decoration-none">Gpo</a></li>
       <li class="border-bottom border-color"><a href="/categories/passwords" class="text-color d-block pb-3 mt-3 text-decoration-none">Passwords</a></li>
       <li class="border-bottom border-color"><a href="/categories/privilege-identity-management" class="text-color d-block pb-3 mt-3 text-decoration-none">Privilege identity management</a></li>
@@ -352,16 +354,20 @@ If the script succeeds it will also report the status of the account, since if t
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Tags</h4>
     <ul class="list-inline tag-list">
-      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">Acl</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">ACL</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/active-directory">Active directory</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/ad">Ad</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/assessment">Assessment</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/azure-ad">Azure ad</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/forest">Forest</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/gpo">Gpo</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/password">Password</a></li>
-      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">Pim</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">PIM</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/privilege-access">Privilege access</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/privileged-account">Privileged account</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/security">Security</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust">Trust</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust-account">Trust account</a></li>
     </ul>
   </div>
 </aside>

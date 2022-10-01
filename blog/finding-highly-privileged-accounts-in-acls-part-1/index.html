@@ -9,7 +9,7 @@
   <meta name="description" content="Detecting powerfull accounts by ACL&#39;s">
   
   <meta name="author" content="robin granberg">
-  <meta name="generator" content="Hugo 0.65.3" />
+  <meta name="generator" content="Hugo 0.102.3" />
 
   <!-- plugins -->
   
@@ -192,38 +192,38 @@ First, we will focus on using the command line mode since you easily can pipe th
 <h4 id="powershell-command">PowerShell Command</h4>
 <p>If you run <a href="https://github.com/canix1/ADACLScanner">ADACLScan.ps1</a> without parameters it will launch the graphical interface, but if you add the properly selected parameters you will run in command mode.</p>
 <p>To run in command mode, you must add the <strong>-base</strong> (or the alias for the same <strong>-b</strong>) parameter and define a starting point using the distinguished name. I will use <strong>dc=contoso,dc=com</strong> which is the root of my domain.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -base <span style="color:#e6db74">&#34;dc=contoso,dc=com&#34;</span>
-</code></pre></div><p>Our objective is to find any unexpected user accounts with critical permissions on the domain level.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -base <span style="color:#e6db74">&#34;dc=contoso,dc=com&#34;</span>
+</span></span></code></pre></div><p>Our objective is to find any unexpected user accounts with critical permissions on the domain level.</p>
 <p>To do that we run:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical | ft
-</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/Step1.webp" onerror="this.src='..\/..\/images\/blog\/Step1.png'" alt="post thumb">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical | ft
+</span></span></code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/Step1.webp" onerror="this.src='..\/..\/images\/blog\/Step1.png'" alt="post thumb">
 <p>And as you can see, we only received the critical permissions.</p>
 <p>But this result contains a lot of expected users and groups.</p>
 <p><em><strong>Can we exclude the default permissions? - Yes, we can!</strong></em></p>
 <p>Add the parameter <strong>-SkipDefaults</strong> to filter the result from default permissions.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults | ft
-</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step2.webp" onerror="this.src='..\/..\/images\/blog\/Step2.png'" alt="post thumb">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults | ft
+</span></span></code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step2.webp" onerror="this.src='..\/..\/images\/blog\/Step2.png'" alt="post thumb">
 Now we have a much shorter list to analyze. In our scenario we have good control of the built-in groups, so we are not interested in listing them here. Both <strong>Incoming Forest Trust Builders</strong> and <strong>Clonable Domain Controllers</strong> are groups we monitor and keep track of.</p>
 <p><em><strong>Can we ignore these built-in groups? - Sure!</strong></em></p>
 <p>Add the <strong>-SkipBuiltin</strong> parameter to the command and it will ignore built-in groups.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn | ft
-</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step3.webp" onerror="this.src='..\/..\/images\/blog\/Step3.png'" alt="post thumb">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn | ft
+</span></span></code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step3.webp" onerror="this.src='..\/..\/images\/blog\/Step3.png'" alt="post thumb">
 Ok, Now it&rsquo;s just some custom ACE&rsquo;s left. Wow, that&rsquo;s much easier. Right?</p>
 <p>Well, the result contains groups and we need to know what user accounts are critical to the domain root.</p>
 <p><strong>We need to know who is member of these groups&hellip; and the nested groups&hellip; and the groups nested of these&hellip; and so on&hellip; <em><strong>Sigh!</strong></em></strong></p>
 <p>Let&rsquo;s fix that! Just add <strong>-RecursiveFind</strong>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn -RecursiveFind | ft
-</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/Step4.webp" onerror="this.src='..\/..\/images\/blog\/Step4.png'" alt="post thumb">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn -RecursiveFind | ft
+</span></span></code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/Step4.webp" onerror="this.src='..\/..\/images\/blog\/Step4.png'" alt="post thumb">
 <p>Awesome, all highly privileged accounts are listed, although we got a couple of additional groups too.</p>
 <p>You can filter the recursive search to only return users (by default all objects are returned) in the nested group chain with <strong>-RecursiveObjectType user</strong>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn -RecursiveFind -RecursiveObjectType user | ft
-</code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step5.webp" onerror="this.src='..\/..\/images\/blog\/Step5.png'" alt="post thumb">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1 -b <span style="color:#e6db74">&#34;DC=contoso,DC=com&#34;</span> -Criticality Critical -SkipDefaults -SkipBuiltIn -RecursiveFind -RecursiveObjectType user | ft
+</span></span></code></pre></div><p><img class="img-fluid d-block mx-auto" src="../../images/blog/Step5.webp" onerror="this.src='..\/..\/images\/blog\/Step5.png'" alt="post thumb">
 Maybe your results won&rsquo;t be this obvious, but the account name are often a starting point for digging deeper. In this case the user MaliciouseActor really sticks out :)</p>
 <h4 id="graphical-user-interface">GRAPHICAL USER INTERFACE</h4>
 <p>This clip shows how to do the same thing from the graphical user interface. It&rsquo;s really easy!</p>
 <p>Start <strong>ADACLScan.ps1</strong> by either right-clicking it and select <strong>Run with PowerShell</strong> or run the following in the PowerShell window:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\ADACLScan.ps1
-</code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/highlyPrivilegedAccount_compressd.gif" onerror="this.src=''" alt="post thumb">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\ADACLScan.ps1
+</span></span></code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/highlyPrivilegedAccount_compressd.gif" onerror="this.src=''" alt="post thumb">
 <h3 id="summary">Summary</h3>
 <p>In this blog post I covered how to scan the domain root of a domain and identify the accounts you might otherwise have missed when listing highly privileged and sensitive accounts in your domain.</p>
 <p>You can of course run this command through the whole Active Directory, but it might take a while especially if you use excessive group nesting with groups that have many members.</p>
@@ -272,6 +272,16 @@ Maybe your results won&rsquo;t be this obvious, but the account name are often a
     <!-- post-item -->
     
     <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/securing-the-forest-boundary/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/ProtectForestTrust.webp"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/securing-the-forest-boundary/">
+          <h5 class="mt-0">Securing the forest boundary</h5>
+        </a>
+        01 Oct 2022
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
       <a href="https://managedpriv.com/blog/azure-ad-group-nesting/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/PIMAdmin.webp"></a>
       <div class="media-body">
         <a href="https://managedpriv.com/blog/azure-ad-group-nesting/">
@@ -291,25 +301,17 @@ Maybe your results won&rsquo;t be this obvious, but the account name are often a
       </div>
     </div>
     
-    <div class="media border-bottom border-color pb-3 mb-3">
-      <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/powerfullaccounts.webp"></a>
-      <div class="media-body">
-        <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/">
-          <h5 class="mt-0">Finding Highly Privileged Accounts in ACL&#39;s - Part 1</h5>
-        </a>
-        27 Apr 2020
-      </div>
-    </div>
-    
   </div>
   <!-- categories -->
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Category</h4>
     <ul class="list-styled style-circle">
-      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">Acl</a></li>
+      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">ACL</a></li>
       <li class="border-bottom border-color"><a href="/categories/active-directory" class="text-color d-block pb-3 mt-3 text-decoration-none">Active directory</a></li>
-      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad acl scanner</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad ACL scanner</a></li>
       <li class="border-bottom border-color"><a href="/categories/azure-ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Azure ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/forest-security-boundary" class="text-color d-block pb-3 mt-3 text-decoration-none">Forest security boundary</a></li>
       <li class="border-bottom border-color"><a href="/categories/gpo" class="text-color d-block pb-3 mt-3 text-decoration-none">Gpo</a></li>
       <li class="border-bottom border-color"><a href="/categories/passwords" class="text-color d-block pb-3 mt-3 text-decoration-none">Passwords</a></li>
       <li class="border-bottom border-color"><a href="/categories/privilege-identity-management" class="text-color d-block pb-3 mt-3 text-decoration-none">Privilege identity management</a></li>
@@ -319,16 +321,20 @@ Maybe your results won&rsquo;t be this obvious, but the account name are often a
   <div class="bg-white px-4 py-5 box-shadow mb-5">
     <h4 class="mb-4">Tags</h4>
     <ul class="list-inline tag-list">
-      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">Acl</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">ACL</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/active-directory">Active directory</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/ad">Ad</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/assessment">Assessment</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/azure-ad">Azure ad</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/forest">Forest</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/gpo">Gpo</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/password">Password</a></li>
-      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">Pim</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">PIM</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/privilege-access">Privilege access</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/privileged-account">Privileged account</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/security">Security</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust">Trust</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust-account">Trust account</a></li>
     </ul>
   </div>
 </aside>
