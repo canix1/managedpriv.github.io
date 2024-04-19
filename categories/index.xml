@@ -6,87 +6,70 @@
     <description>Recent content in Categories on Robin Granberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Oct 2022 12:45:32 +0600</lastBuildDate><atom:link href="https://managedpriv.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 13 Apr 2024 12:45:32 +0600</lastBuildDate>
+    <atom:link href="https://managedpriv.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Azure AD</title>
+      <link>https://managedpriv.com/categories/azure-ad/</link>
+      <pubDate>Sat, 13 Apr 2024 12:45:32 +0600</pubDate>
+      <guid>https://managedpriv.com/categories/azure-ad/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Privilege Identity Management</title>
+      <link>https://managedpriv.com/categories/privilege-identity-management/</link>
+      <pubDate>Sat, 13 Apr 2024 12:45:32 +0600</pubDate>
+      <guid>https://managedpriv.com/categories/privilege-identity-management/</guid>
+      <description></description>
+    </item>
     <item>
       <title>AD</title>
       <link>https://managedpriv.com/categories/ad/</link>
       <pubDate>Sat, 01 Oct 2022 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/categories/ad/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Forest Security Boundary</title>
       <link>https://managedpriv.com/categories/forest-security-boundary/</link>
       <pubDate>Sat, 01 Oct 2022 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/categories/forest-security-boundary/</guid>
       <description></description>
     </item>
-    
-    <item>
-      <title>Azure AD</title>
-      <link>https://managedpriv.com/categories/azure-ad/</link>
-      <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
-      
-      <guid>https://managedpriv.com/categories/azure-ad/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Privilege Identity Management</title>
-      <link>https://managedpriv.com/categories/privilege-identity-management/</link>
-      <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
-      
-      <guid>https://managedpriv.com/categories/privilege-identity-management/</guid>
-      <description></description>
-    </item>
-    
     <item>
       <title>ACL</title>
       <link>https://managedpriv.com/categories/acl/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/categories/acl/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Active Directory</title>
       <link>https://managedpriv.com/categories/active-directory/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/categories/active-directory/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>AD ACL Scanner</title>
       <link>https://managedpriv.com/categories/ad-acl-scanner/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/categories/ad-acl-scanner/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>GPO</title>
       <link>https://managedpriv.com/categories/gpo/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/categories/gpo/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>passwords</title>
+      <title>Passwords</title>
       <link>https://managedpriv.com/categories/passwords/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
-      
       <guid>https://managedpriv.com/categories/passwords/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

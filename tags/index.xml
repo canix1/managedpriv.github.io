@@ -6,132 +6,119 @@
     <description>Recent content in Tags on Robin Granberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Oct 2022 12:45:32 +0600</lastBuildDate><atom:link href="https://managedpriv.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 13 Apr 2024 12:45:32 +0600</lastBuildDate>
+    <atom:link href="https://managedpriv.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>API</title>
+      <link>https://managedpriv.com/tags/api/</link>
+      <pubDate>Sat, 13 Apr 2024 12:45:32 +0600</pubDate>
+      <guid>https://managedpriv.com/tags/api/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Entra ID</title>
+      <link>https://managedpriv.com/tags/entra-id/</link>
+      <pubDate>Sat, 13 Apr 2024 12:45:32 +0600</pubDate>
+      <guid>https://managedpriv.com/tags/entra-id/</guid>
+      <description></description>
+    </item>
     <item>
       <title>AD</title>
       <link>https://managedpriv.com/tags/ad/</link>
       <pubDate>Sat, 01 Oct 2022 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/ad/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Forest</title>
       <link>https://managedpriv.com/tags/forest/</link>
       <pubDate>Sat, 01 Oct 2022 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/forest/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Trust</title>
       <link>https://managedpriv.com/tags/trust/</link>
       <pubDate>Sat, 01 Oct 2022 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/trust/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Trust Account</title>
       <link>https://managedpriv.com/tags/trust-account/</link>
       <pubDate>Sat, 01 Oct 2022 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/trust-account/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure AD</title>
       <link>https://managedpriv.com/tags/azure-ad/</link>
       <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/azure-ad/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>PIM</title>
       <link>https://managedpriv.com/tags/pim/</link>
       <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/pim/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Privilege Access</title>
       <link>https://managedpriv.com/tags/privilege-access/</link>
       <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/privilege-access/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>ACL</title>
       <link>https://managedpriv.com/tags/acl/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/acl/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>active directory</title>
+      <title>Active Directory</title>
       <link>https://managedpriv.com/tags/active-directory/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/active-directory/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Assessment</title>
       <link>https://managedpriv.com/tags/assessment/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/assessment/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>GPO</title>
       <link>https://managedpriv.com/tags/gpo/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/gpo/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Privileged Account</title>
       <link>https://managedpriv.com/tags/privileged-account/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/privileged-account/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>security</title>
+      <title>Security</title>
       <link>https://managedpriv.com/tags/security/</link>
       <pubDate>Wed, 10 Jun 2020 15:58:12 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/security/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>password</title>
+      <title>Password</title>
       <link>https://managedpriv.com/tags/password/</link>
       <pubDate>Thu, 07 Feb 2019 10:47:55 +0600</pubDate>
-      
       <guid>https://managedpriv.com/tags/password/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

@@ -9,7 +9,7 @@
   <meta name="description" content="How can you protect your forest from incoming one-way trust">
   
   <meta name="author" content="robin granberg">
-  <meta name="generator" content="Hugo 0.102.3" />
+  <meta name="generator" content="Hugo 0.124.1">
 
   <!-- plugins -->
   
@@ -180,7 +180,7 @@
 <p>This topic has been discussed in the previous blog post <a href="https://posts.specterops.io/not-a-security-boundary-breaking-forest-trusts-cd125829518d">Not A Security Boundary: Breaking Forest Trusts</a> by <strong>Will Schroeder</strong> <strong>@harmj0y</strong> but I will focus on the scenario described in <a href="https://improsec.com/tech-blog/sid-filter-as-security-boundary-between-domains-part-7-trust-account-attack-from-trusting-to-trusted">SID filter as security boundary between domains? (Part 7) - Trust account attack - from trusting to trusted</a>.</p>
 <p>When you set up a trust with another forest and specifically only want your users to access the resource in the other domain and not the other way around, that’s a one-way trust. You are the trusted part in this one-way trust and the other side is the trusting part. In most cases, you do not want to expose any directory information to the trusting side of the trust, since you do not trust or can control the security of that forest. The reason for the trust can be many but often organizations are in a situation where you need to migrate from one domain to another. Setting up this trust helps move resources to the destination domain. The old domain could contain a lot of legacy configurations and have a very poor security posture. Sometimes the old domain is managed by a third party that you do not trust. Microsoft has for a very long time presented the idea of the forest as the security boundary, but research by <strong>@Jonas_B_K</strong>, <strong>@martinsohndk</strong>, and <strong>Tobias Thorbjørn Munch Torp</strong> has shown that if you introduce a trust, even a one-way trust you have exposed yourself to the trusting part.</p>
 <h3 id="problem">PROBLEM</h3>
-<img class="img-fluid d-block mx-auto" src="../../images/blog/ForestOneWayTrust.webp" onerror="this.src='..\/..\/images\/blog\/ForestOneWayTrust.png'" alt="post thumb">
+<p><a href="../../images/blog/ForestOneWayTrust.png"><img class="img-fluid d-block mx-auto" src="../../images/blog/ForestOneWayTrust.webp" onerror="this.src='..\/..\/images\/blog\/ForestOneWayTrust.png'" alt="post thumb"></a></p>
 <p>The problem is very well documented in <a href="https://improsec.com/tech-blog/sid-filter-as-security-boundary-between-domains-part-7-trust-account-attack-from-trusting-to-trusted">SID filter as security boundary between domains? (Part 7) - Trust account attack - from trusting to trusted</a>.</p>
 <p>But in short, a domain administrator in the trusting domain (Domain B) have has access to the password for the trust account, since it’s the responsibility of the domain controller in the trusting domain (Domain B) to maintain it, it is this domain controller that shares its information with the other domain. The trust account is represented in the trusted domain (Domain A) as a user account in the Users container. Let’s say the trusting domain (Domain B) is called managedpriv.com then the user account would be called <strong>MANAGEDPRIV$</strong>.</p>
 <img class="img-fluid d-block mx-auto" src="../../images/blog/gettrustaccount.webp" onerror="this.src='..\/..\/images\/blog\/gettrustaccount.png'" alt="post thumb">
@@ -196,7 +196,7 @@ We can turn off authentication by using an Authentication Policy (<a href="https
 <h4 id="this-is-how-it-works-when-no-protection-is-added-to-the-trust-account">This is how it works when no protection is added to the trust account.</h4>
 <p>In the trusting domain (Domain B) <strong>managedpriv.com</strong> we can as a domain admin extract the NTLM hash (rc4_hmac_nt) using <strong>mimikatz</strong>.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\mimikatzs.exe <span style="color:#e6db74">&#34;lsadump::trust /patch&#34;</span>
-</span></span></code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/TrustAcc_Mimikatz.webp" onerror="this.src='..\/..\/images\/blog\/TrustAcc_Mimikatz.png'" alt="post thumb">
+</span></span></code></pre></div><p><a href="../../images/blog/TrustAcc_Mimikatz.png"><img class="img-fluid d-block mx-auto" src="../../images/blog/ForestOneWayTrust.webp" onerror="this.src='..\/..\/images\/blog\/TrustAcc_Mimikatz.png'" alt="post thumb"></a></p>
 <p>Next, we use <strong>Rubeus</strong> with the NTLM hash in a Pass-the-hash attack on the same machine, towards the domain controller in the trusted domain (Domain A) <strong>contoso.com</strong>.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>.\Rubeus.exe asktgt /user<span style="color:#960050;background-color:#1e0010">:</span>&lt;trust account&gt; /domain<span style="color:#960050;background-color:#1e0010">:</span>&lt;trusted domain&gt; /dc<span style="color:#960050;background-color:#1e0010">:</span>&lt;dc <span style="color:#66d9ef">in</span> trusted domain&gt; /rc4<span style="color:#960050;background-color:#1e0010">:</span>&lt;NTLM hash&gt; /ptt
 </span></span></code></pre></div><img class="img-fluid d-block mx-auto" src="../../images/blog/TrustAcc_Rubeus_ptt.webp" onerror="this.src='..\/..\/images\/blog\/TrustAcc_Rubeus_ptt.png'" alt="post thumb">
@@ -270,6 +270,16 @@ We can turn off authentication by using an Authentication Policy (<a href="https
     <!-- post-item -->
     
     <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/breaching-the-sensitive-action-zone-in-entra-id-pim/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/Security_Zone_Sensitive_Actions.webp"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/breaching-the-sensitive-action-zone-in-entra-id-pim/">
+          <h5 class="mt-0">Breaching the sensitive action zone in Entra ID PIM</h5>
+        </a>
+        13 Apr 2024
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
       <a href="https://managedpriv.com/blog/securing-the-forest-boundary/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/ProtectForestTrust.webp"></a>
       <div class="media-body">
         <a href="https://managedpriv.com/blog/securing-the-forest-boundary/">
@@ -286,16 +296,6 @@ We can turn off authentication by using an Authentication Policy (<a href="https
           <h5 class="mt-0">Exposing Azure AD Roles with privileged access groups</h5>
         </a>
         12 Feb 2021
-      </div>
-    </div>
-    
-    <div class="media border-bottom border-color pb-3 mb-3">
-      <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-2/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/DefenseEvasion.webp"></a>
-      <div class="media-body">
-        <a href="https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-2/">
-          <h5 class="mt-0">Finding Highly Privileged Accounts in ACL&#39;s - Part 2 - GROUP POLICY</h5>
-        </a>
-        10 Jun 2020
       </div>
     </div>
     
@@ -322,8 +322,10 @@ We can turn off authentication by using an Authentication Policy (<a href="https
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">ACL</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/active-directory">Active directory</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/ad">Ad</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/api">API</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/assessment">Assessment</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/azure-ad">Azure ad</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/entra-id">Entra ID</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/forest">Forest</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/gpo">Gpo</a></li>
       <li class="list-inline-item"><a class="hover-ripple" href="/tags/password">Password</a></li>
