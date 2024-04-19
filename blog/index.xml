@@ -6,12 +6,12 @@
     <description>Recent content in Blog on Robin Granberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 13 Apr 2024 12:45:32 +0600</lastBuildDate>
+    <lastBuildDate>Fri, 19 Apr 2024 17:25:32 +0600</lastBuildDate>
     <atom:link href="https://managedpriv.com/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Breaching the sensitive action zone in Entra ID PIM</title>
       <link>https://managedpriv.com/blog/breaching-the-sensitive-action-zone-in-entra-id-pim/</link>
-      <pubDate>Sat, 13 Apr 2024 12:45:32 +0600</pubDate>
+      <pubDate>Fri, 19 Apr 2024 17:25:32 +0600</pubDate>
       <guid>https://managedpriv.com/blog/breaching-the-sensitive-action-zone-in-entra-id-pim/</guid>
       <description>Entra ID Privileged Identity Management (PIM) is a great security service if used correctly.</description>
     </item>
