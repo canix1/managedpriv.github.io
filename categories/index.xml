@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 19 Apr 2024 17:25:32 +0600</lastBuildDate>
     <atom:link href="https://managedpriv.com/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Azure AD</title>
-      <link>https://managedpriv.com/categories/azure-ad/</link>
+      <title>Entra ID</title>
+      <link>https://managedpriv.com/categories/entra-id/</link>
       <pubDate>Fri, 19 Apr 2024 17:25:32 +0600</pubDate>
-      <guid>https://managedpriv.com/categories/azure-ad/</guid>
+      <guid>https://managedpriv.com/categories/entra-id/</guid>
       <description></description>
     </item>
     <item>
@@ -34,6 +34,13 @@
       <link>https://managedpriv.com/categories/forest-security-boundary/</link>
       <pubDate>Sat, 01 Oct 2022 12:45:32 +0600</pubDate>
       <guid>https://managedpriv.com/categories/forest-security-boundary/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Azure AD</title>
+      <link>https://managedpriv.com/categories/azure-ad/</link>
+      <pubDate>Fri, 12 Feb 2021 12:45:32 +0600</pubDate>
+      <guid>https://managedpriv.com/categories/azure-ad/</guid>
       <description></description>
     </item>
     <item>
