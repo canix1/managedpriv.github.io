@@ -13,7 +13,7 @@
       <link>https://managedpriv.com/blog/securing-the-forest-boundary/</link>
       <pubDate>Sat, 01 Oct 2022 12:45:32 +0600</pubDate>
       <guid>https://managedpriv.com/blog/securing-the-forest-boundary/</guid>
-      <description>In the article SID filter as security boundary between domains? (Part 7) - Trust account attack - from trusting to trusted , by Jonas Bülow Knudsen, Martin Sohn Christensen, Tobias Thorbjørn Munch Torp, they describe how the security boundary of the forest can be breached by an admin in the trusted forest and I will explain how you can mitigate this problem.</description>
+      <description>In the article SID filter as security boundary between domains? (Part 7) - Trust account attack - from trusting to trusted , by Jonas Bülow Knudsen, Martin Sohn Christensen, Tobias Thorbjørn Munch Torp, they describe how the security boundary of the forest can be breached by an admin in the trusting forest and I will explain how you can mitigate this problem.</description>
     </item>
   </channel>
 </rss>
