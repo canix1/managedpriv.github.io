@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ActiveDirectorySecurity on Robin Granberg - Managed Privileges</title>
+    <link>https://managedpriv.com/tags/activedirectorysecurity/</link>
+    <description>Recent content in ActiveDirectorySecurity on Robin Granberg - Managed Privileges</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 22 May 2026 10:00:00 +0000</lastBuildDate><atom:link href="https://managedpriv.com/tags/activedirectorysecurity/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Hidden Traps in ActiveDirectorySecurity Class</title>
+      <link>https://managedpriv.com/blog/activedirectorysecurity-design-problems/</link>
+      <pubDate>Fri, 22 May 2026 10:00:00 +0000</pubDate>
+      
+      <guid>https://managedpriv.com/blog/activedirectorysecurity-design-problems/</guid>
+      <description>If you have ever tried to build an ACL backup tool, a delegation cloning script, or a migration utility for Active Directory using the standard .</description>
+    </item>
+    
+  </channel>
+</rss>
