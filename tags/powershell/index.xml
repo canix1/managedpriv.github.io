@@ -6,15 +6,21 @@
     <description>Recent content in PowerShell on Robin Granberg - Managed Privileges</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 May 2026 10:00:00 +0000</lastBuildDate><atom:link href="https://managedpriv.com/tags/powershell/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Jun 2026 21:08:00 +0000</lastBuildDate>
+    <atom:link href="https://managedpriv.com/tags/powershell/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Deny ACE That Never Fires: Non-Canonical ACL Order in Active Directory</title>
+      <link>https://managedpriv.com/blog/acl-canonical-order-and-security/</link>
+      <pubDate>Tue, 02 Jun 2026 21:08:00 +0000</pubDate>
+      <guid>https://managedpriv.com/blog/acl-canonical-order-and-security/</guid>
+      <description>Most people who work with Active Directory ACLs know that Deny should come before Allow, and that explicit permissions take precedence over inherited ones.</description>
+    </item>
     <item>
       <title>The Hidden Traps in ActiveDirectorySecurity Class</title>
       <link>https://managedpriv.com/blog/activedirectorysecurity-design-problems/</link>
       <pubDate>Fri, 22 May 2026 10:00:00 +0000</pubDate>
-      
       <guid>https://managedpriv.com/blog/activedirectorysecurity-design-problems/</guid>
       <description>If you have ever tried to build an ACL backup tool, a delegation cloning script, or a migration utility for Active Directory using the standard .</description>
     </item>
-    
   </channel>
 </rss>

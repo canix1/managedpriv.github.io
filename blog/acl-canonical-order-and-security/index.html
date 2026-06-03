@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+<html lang="en-us"><head>
+  <meta charset="utf-8">
+  <title>The Deny ACE That Never Fires: Non-Canonical ACL Order in Active Directory</title>
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="What canonical ACL order is, how Windows evaluates ACEs top-to-bottom, and what happens when you write a non-canonical ACL — including a proof-of-concept where Allow overrides Deny.">
+  
+  <meta name="author" content="robin granberg">
+  <meta name="generator" content="Hugo 0.124.1">
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://managedpriv.com/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://managedpriv.com/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://managedpriv.com/plugins/fontawesome/font-awesome.min.css">
+  
+  <link rel="stylesheet" href="https://managedpriv.com/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://managedpriv.com/plugins/venobox/venobox.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://managedpriv.com/scss/style.min.css" media="screen">
+
+  <style>
+     
+    .content pre *{margin-bottom:0;line-height:inherit}
+
+     
+    :root{
+      --mn-bg:      #0f172a;
+      --mn-surface: #1e293b;
+      --mn-surface2:#263346;
+      --mn-accent:  #38bdf8;
+      --mn-accent-d:#0ea5e9;
+      --mn-text:    #94a3b8;
+      --mn-heading: #e2e8f0;
+      --mn-border:  #334155;
+    }
+
+     
+    body{background-color:var(--mn-bg)!important;color:var(--mn-text)}
+    p,.paragraph{color:var(--mn-text);font-size:16px;line-height:1.8}
+    ::selection{background:var(--mn-accent)!important;color:#0f172a!important}
+    .preloader{background-color:var(--mn-bg)!important}
+
+     
+    h1,h2,h3,h4,h5,h6{color:var(--mn-heading)!important;text-transform:none!important;letter-spacing:-0.01em}
+
+     
+    a:hover{color:var(--mn-accent)}
+    .text-dark{color:var(--mn-heading)!important}
+    .text-color{color:var(--mn-text)!important}
+    .text-light{color:var(--mn-text)!important}
+
+     
+    .top-header{background:#07101e!important}
+    .navigation{background:var(--mn-surface)!important;box-shadow:0 1px 0 var(--mn-border)!important}
+    .navbar,.navbar-light{background:var(--mn-surface)!important}
+    .navbar-light .navbar-nav .nav-link{color:var(--mn-text)!important}
+    .navbar-light .navbar-nav .nav-link:hover{color:var(--mn-accent)!important}
+    .navbar .dropdown-menu{background:var(--mn-surface2)!important}
+    .navbar .dropdown-item{color:var(--mn-text)!important}
+    .navbar .dropdown-item:hover{color:var(--mn-accent)!important;background:transparent!important}
+    .navbar-toggler{border-color:var(--mn-border)!important}
+    .navbar-toggler-icon{filter:invert(0.7)}
+    .search-wrapper{background:var(--mn-surface)!important}
+    .search-box{background:var(--mn-surface)!important;color:var(--mn-heading)!important}
+
+     
+    .bg-gray{background:var(--mn-surface)!important}
+    .bg-white{background:var(--mn-surface)!important}
+    .bg-secondary{background:var(--mn-surface)!important}
+    .bg-secondary-darken{background:#131d2e!important}
+    .bg-white-gray{background-image:linear-gradient(to right,var(--mn-bg) 45%,var(--mn-surface) 0%)!important}
+    .bg-gray-white{background-image:linear-gradient(to right,var(--mn-surface) 45%,var(--mn-bg) 0%)!important}
+    .bg-white2-gray{background-image:linear-gradient(to right,var(--mn-bg) 70%,var(--mn-surface) 0%)!important}
+
+     
+    .card{background:var(--mn-surface)!important;border-color:var(--mn-border)!important}
+    .card-body{background:var(--mn-surface)!important}
+    .card-title a{color:var(--mn-heading)!important}
+    .card-title a:hover{color:var(--mn-accent)!important}
+    .card-meta{color:var(--mn-text)!important}
+    .card-type{background:var(--mn-accent)!important;color:#0f172a!important;font-weight:700}
+    .card-meta strong,.card-body strong{color:var(--mn-heading)!important}
+
+     
+    aside .bg-white,aside [class*="px-4"]{background:var(--mn-surface)!important}
+    aside h4{color:var(--mn-heading)!important}
+    aside a{color:var(--mn-text)!important}
+    aside a:hover{color:var(--mn-accent)!important}
+
+     
+    .border-color{border-color:var(--mn-border)!important}
+    .border-bottom{border-color:var(--mn-border)!important}
+    .box-shadow{box-shadow:0 4px 24px rgba(0,0,0,.5)!important}
+
+     
+    .btn-primary{background:var(--mn-accent)!important;border-color:var(--mn-accent)!important;color:#0f172a!important;font-weight:700}
+    .btn-primary:hover,.btn-primary:active{background:var(--mn-accent-d)!important;border-color:var(--mn-accent-d)!important;color:#0f172a!important}
+    .btn-gray{background:var(--mn-surface)!important;color:var(--mn-heading)!important;border-color:var(--mn-border)!important}
+    .btn-gray:hover{background:var(--mn-accent)!important;border-color:var(--mn-accent)!important;color:#0f172a!important}
+
+     
+    .section-title-border{background:var(--mn-accent)!important}
+    .title-border-left::before{background:var(--mn-accent)!important}
+    .list-styled li::before{color:var(--mn-accent)!important}
+    .hilighted{background:var(--mn-accent)!important;color:#0f172a!important}
+
+     
+    .tag-list a{background:var(--mn-surface)!important;color:var(--mn-text)!important;box-shadow:0 2px 8px rgba(0,0,0,.3)!important;border:1px solid var(--mn-border)}
+    .tag-list a:hover{background:var(--mn-accent)!important;color:#0f172a!important;border-color:var(--mn-accent)}
+
+     
+    blockquote{border-left-color:var(--mn-accent)!important;box-shadow:0 4px 20px rgba(0,0,0,.4)!important;color:var(--mn-text)!important;background:var(--mn-surface)}
+    blockquote::before{color:rgba(56,189,248,.12)!important}
+    blockquote p{color:var(--mn-text)!important}
+
+     
+    .content table{border-color:var(--mn-border)!important}
+    .content table th,.content table td{border-color:var(--mn-border)!important;color:var(--mn-text)}
+    .content table thead{background:var(--mn-surface2)!important}
+    .content table thead th{color:var(--mn-heading)!important}
+    .content table tbody{background:var(--mn-surface)!important}
+    .content table tbody td{color:var(--mn-text)!important}
+
+     
+    .content pre{background:var(--mn-surface)!important;border:1px solid var(--mn-border);border-radius:6px;color:var(--mn-heading)!important}
+    code{background:var(--mn-surface)!important;color:var(--mn-accent);padding:2px 5px;border-radius:3px}
+    .content p code,.content li code,.content td code{background:var(--mn-surface2)!important;color:var(--mn-accent)!important;padding:2px 6px;border-radius:4px;font-size:.875em}
+
+     
+    .pagination .page-item .page-link{background:var(--mn-surface)!important;color:var(--mn-accent)!important;border-color:var(--mn-border)!important}
+    .pagination .page-item.active .page-link{background:var(--mn-accent)!important;border-color:var(--mn-accent)!important;color:#0f172a!important}
+
+     
+    .form-control{background:var(--mn-surface)!important;border-color:var(--mn-border)!important;color:var(--mn-heading)!important}
+    .form-control:focus{border-color:var(--mn-accent)!important}
+    .form-control::placeholder{color:var(--mn-border)!important}
+
+     
+    .social-icon li a{border-color:var(--mn-border)!important;color:var(--mn-text)!important}
+    .social-icon li a:hover{color:var(--mn-accent)!important;background:var(--mn-surface2)!important;border-color:var(--mn-accent)!important}
+    .social-icon-alt li a{border-color:var(--mn-border)!important;color:var(--mn-text)!important}
+    .social-icon-alt li a:hover{color:#0f172a!important;background:var(--mn-accent)!important;border-color:var(--mn-accent)!important}
+  </style>
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://managedpriv.com/images/favicon.png " type="image/x-icon">
+  <link rel="icon" href="https://managedpriv.com/images/favicon.png " type="image/x-icon">
+
+  <meta name="twitter:card" content="The Deny ACE That Never Fires: Non-Canonical ACL Order in Active Directory">
+  <meta name="twitter:site" content="managedpriv.com" >
+  
+  <meta property="og:url" content="https://managedpriv.com/blog/acl-canonical-order-and-security/" />
+  <meta property="og:title" content="The Deny ACE That Never Fires: Non-Canonical ACL Order in Active Directory" />
+  <meta property="og:description" content="What canonical ACL order is, how Windows evaluates ACEs top-to-bottom, and what happens when you write a non-canonical ACL — including a proof-of-concept where Allow overrides Deny." />
+  <meta property="og:image" content="https://managedpriv.com/images/blog/CanonicalOrder.webp" />
+
+</head><body>
+<!-- preloader start -->
+<div class="preloader">
+  
+</div>
+<!-- preloader end -->
+<!-- header -->
+<header>
+  
+  <!-- top header -->
+  <div class="top-header bg-secondary pt-2 pb-1">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- social icons -->
+        <div class="col-lg-6 col-md-6 text-center text-md-left">
+          <span class="text-white">Connect With Me:</span>
+          <ul class="list-inline d-inline-block">
+            
+            <li class="list-inline-item"><a class="text-white d-inline-block p-2" href="https://twitter.com/ipcdollar1"><i class="fa fa-twitter"></i></a></li>
+            
+            <li class="list-inline-item"><a class="text-white d-inline-block p-2" href="https://github.com/canix1"><i class="fa fa-github"></i></a></li>
+            
+            <li class="list-inline-item"><a class="text-white d-inline-block p-2" href="https://www.linkedin.com/in/robin-granberg"><i class="fa fa-linkedin"></i></a></li>
+            
+          </ul>
+        </div>
+        <!-- mail and phone -->
+        <div class="col-lg-6 col-md-6 text-md-right text-center">
+          <ul class="list-inline">
+            <li class="list-inline-item mx-0 border-right border-secondary"><a class="text-white d-inline-block px-lg-3 px-2" href="mailto:robin.granberg@protonmail.com">robin.granberg@protonmail.com</a></li>
+            <li class="list-inline-item mx-0"><a class="text-white d-inline-block px-lg-3 px-2" href="tel:">(-: <span class="text-primary"></span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /top header -->
+  
+
+  <!-- navigation -->
+  <div class="navigation bg-white position-relative">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="/"><img class="img-fluid pb-lg-3" src="https://managedpriv.com/images/logo.png" alt="Robin Granberg - Managed Privileges"></a>
+        <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="/blog">Blog</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="/project">Projects</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+
+          
+          <!-- search -->
+          <div class="search px-4">
+            <button id="searchOpen" class="search-btn"><i class="fa fa-search text-dark"></i></button>
+            <div class="search-wrapper">
+              <form action="/search">
+                <input class="search-box form-control" id="search-query" name="s" type="search" placeholder="Type &amp; Hit Enter...">
+              </form>
+              <button id="searchClose" class="search-close"><i class="fa fa-close text-dark"></i></button>
+            </div>
+          </div>
+          
+          
+          <!-- get start btn -->
+          <a href="https://managedpriv.com/project" class="btn btn-primary hover-ripple">projects</a>
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+  <!-- /navigation -->
+</header>
+<!-- /header -->
+
+<!-- page title -->
+<section class="section bg-cover overlay" style="background-image: url('https://managedpriv.com/images/backgrounds/page-title.webp'),url('https://managedpriv.com/images/backgrounds/page-title.jpg'),url('https://managedpriv.com/images/backgrounds/page-title.jpg');">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="text-white mb-3">The Deny ACE That Never Fires: Non-Canonical ACL Order in Active Directory</h2>
+        <!-- breadcrumb -->
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent p-0">
+            <li class="breadcrumb-item font-weight-semebold"><a class="text-white" href="/">Home</a></li>
+            <li class="breadcrumb-item font-weight-semebold active text-primary" aria-current="page">The Deny ACE That Never Fires: Non-Canonical ACL Order in Active Directory</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /page title -->
+
+<!-- blog details -->
+<section class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <!-- post thumb -->
+        <div class="position-relative mb-5">
+          <img src="https://managedpriv.com/images/blog/CanonicalOrder.webp"  onerror="this.src='https:\/\/managedpriv.com\/images\/blog\/CanonicalOrder.png'" alt="post thumb" class="img-fluid w-100">
+           <div class="card-type">Active Directory Coding</div>
+        </div>
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false"><img src="../../images/tweet.png" width="62" height="24"></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>        
+        <div class="card-meta text-uppercase mb-2">by <strong class="text-dark">Robin Granberg</strong>/ on <strong class="text-dark">02 Jun 2026</strong></div>
+        <h2>The Deny ACE That Never Fires: Non-Canonical ACL Order in Active Directory</h2>
+        <div class="content">
+          <p>Most people who work with Active Directory ACLs know that Deny should come before Allow, and that explicit permissions take precedence over inherited ones. But the mechanics behind that rule — and what actually happens when you violate it — are less well understood.</p>
+<p>This post explains what canonical ACL order means, why it exists, and demonstrates what happens when you intentionally write a non-canonical ACL to Active Directory.</p>
+<h2 id="what-is-an-acl">What Is an ACL?</h2>
+<p>A Discretionary Access Control List (DACL) is an ordered list of Access Control Entries (ACEs). Each ACE grants or denies a specific set of rights to a specific security principal (a user, group, or computer account).</p>
+<p>The key word is <strong>ordered</strong>. The Windows security subsystem evaluates ACEs sequentially from the first entry to the last. That means the position of an ACE in the list is part of its meaning.</p>
+<h2 id="what-is-canonical-order">What Is Canonical Order?</h2>
+<p>Canonical order is a defined ordering of ACEs that Windows uses — and expects — in a DACL. The specification, from the Windows Security documentation, places ACEs in this sequence:</p>
+<ol>
+<li>Explicit deny ACEs (non-inherited, Deny)</li>
+<li>Explicit allow ACEs (non-inherited, Allow)</li>
+<li>Inherited deny ACEs</li>
+<li>Inherited allow ACEs</li>
+</ol>
+<p>Within each category, object-specific ACEs come before non-object-specific ACEs.</p>
+<p>The purpose of this ordering is straightforward: <strong>Deny must always be evaluated before Allow</strong>. If a deny ACE for an operation precedes the allow ACE for the same operation, the deny wins regardless of what comes later. If the order is reversed, the result depends on how far the access check evaluates before accumulating sufficient rights.</p>
+<h2 id="how-windows-evaluates-aces">How Windows Evaluates ACEs</h2>
+<p>The Windows <code>AccessCheck()</code> function processes ACEs in order. It maintains a running set of granted rights and a set of remaining desired rights. The evaluation works roughly as follows:</p>
+<ol>
+<li>If a Deny ACE matches a requested right → access denied immediately</li>
+<li>If an Allow ACE matches → add those rights to the granted set; remove from remaining</li>
+<li>If all desired rights have been granted → access allowed</li>
+<li>If the end of the DACL is reached without granting all rights → access denied</li>
+</ol>
+<p>The critical detail here is step 3: once all desired rights are accumulated, the check stops. ACEs that appear later in the list are never evaluated.</p>
+<p>This means that if an Allow ACE appears <strong>before</strong> a Deny ACE, the Allow ACE may grant the requested right before the Deny ACE is ever reached — and the access check succeeds even though a deny was intended.</p>
+<h2 id="object-ace-vs-common-ace">Object ACE vs Common ACE</h2>
+<p>An AD ACE can be one of two types:</p>
+<p><strong>CommonAce</strong> — used when neither an <code>ObjectType</code> GUID nor an <code>InheritedObjectType</code> GUID is present. This is a standard allow or deny for a generic right.</p>
+<p><strong>ObjectAce</strong> — used when the ACE carries a specific object class GUID, an extended right GUID, or both. Most AD delegation is expressed as <code>ObjectAce</code> entries: for example, &ldquo;allow CreateChild for objects of class <code>computer</code>&rdquo; or &ldquo;allow <code>User-Force-Change-Password</code> on user objects&rdquo;.</p>
+<p>If you are working with <code>RawSecurityDescriptor</code>, you can distinguish them with an <code>is</code> check:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ($ace <span style="color:#f92672">-is</span> [<span style="color:#66d9ef">System.Security.AccessControl.ObjectAce</span>]) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># has ObjectAceType and/or InheritedObjectAceType GUIDs</span>
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># CommonAce — no object-specific GUIDs</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="when-canonicalization-is-desirable">When Canonicalization Is Desirable</h2>
+<p>For normal administration — delegation, helpdesk permissions, GPO security — canonical order is the right choice. It gives you:</p>
+<ul>
+<li>Predictable, deterministic access evaluation</li>
+<li>Compatibility with GUI tools (ADUC, ADSS, <code>dsacls</code>, <code>icacls</code>)</li>
+<li>Correct semantics when Deny and Allow ACEs coexist</li>
+<li>Easier auditing</li>
+</ul>
+<p>Every tool in the Windows administration stack — Active Directory Users and Computers, the Delegation of Control Wizard, <code>dsacls</code>, <code>Set-Acl</code> — writes canonical ACLs.</p>
+<h2 id="when-canonicalization-is-harmful">When Canonicalization Is Harmful</h2>
+<p>For backup, restore, migration, and any tooling that requires bit-perfect fidelity, automatic canonicalization is a problem. If the API silently reorders ACEs during a roundtrip, the restored ACL is not byte-identical to the original — and in some edge cases it may not even be semantically identical.</p>
+<p>This is one of the core reasons why <code>System.DirectoryServices.ActiveDirectorySecurity.AddAccessRule()</code> is unsuitable for restore operations: it canonicalizes as a side effect. See the companion post for details.</p>
+<p>The write path has two distinct parts. First, <code>RawAcl.InsertAce()</code> is used to construct the DACL: it inserts each ACE at exactly the index you specify, with no reordering. Second, the serialized binary form is written back to AD via <code>GetBinaryForm()</code>, <code>SetSecurityDescriptorBinaryForm()</code>, and <code>CommitChanges()</code>. Both steps preserve positional order — <code>InsertAce()</code> builds the ACL as intended, and the binary write path carries it to the DC without the API imposing canonical sorting.</p>
+<h2 id="does-ad-always-canonicalize-on-write">Does AD Always Canonicalize on Write?</h2>
+<p>A common assumption is that the domain controller always re-canonicalizes an ACL when it is committed, so any non-canonical input gets &ldquo;fixed&rdquo; on the server side.</p>
+<p>This is not always true.</p>
+<p>Testing shows that when a security descriptor is written via <code>ObjectSecurity.SetSecurityDescriptorBinaryForm()</code> followed by <code>CommitChanges()</code>, the LSASS canonicalizer on the DC does <strong>not</strong> always reorder the ACL. The behavior varies by:</p>
+<ul>
+<li>Windows Server version</li>
+<li>Domain functional level</li>
+<li>The specific ACE types involved</li>
+<li>The commit path used (ADSI vs LDAP API vs <code>SetSecurityInfo</code>)</li>
+</ul>
+<p>In some cases you will see the DC reorder the ACL. In others, the non-canonical order survives the commit.</p>
+<h2 id="proof-of-concept-allow-before-deny-in-active-directory">Proof of Concept: Allow Before Deny in Active Directory</h2>
+<p>The following script demonstrates that it is possible to write a non-canonical ACL to an AD object with Allow appearing before Deny — and that the DC may preserve this ordering.</p>
+<p>The test creates two object-specific ACEs for <code>CreateChild computer</code> on a target OU for the user <em>CONTOSO\User1</em>:</p>
+<ol>
+<li>An <strong>Allow</strong> ACE at position 0</li>
+<li>A <strong>Deny</strong> ACE appended at the end</li>
+</ol>
+<p><a href="https://managedpriv.com/images/blog/CanonicalFalse.png"><img class="img-fluid d-block mx-auto" src="../../images/blog/CanonicalFalse.webp" onerror="this.src='..\/..\/images\/blog\/CanonicalFalse.png'" alt="post thumb"></a></p>
+<p>In this picture we can see that CONTOSO\User1 has both Allow and Deny for creating computer objects, but normally the <strong>Deny</strong> ACE should be at the top.</p>
+<p>In a canonical ACL, the Deny would appear first. Here we deliberately invert the order using <code>InsertAce()</code> to bypass any canonicalization that <code>AddAccessRule()</code> would impose.</p>
+<p>Here is the code to accomplish this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Import-Module ActiveDirectory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> Get-UserSID {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">param</span>(
+</span></span><span style="display:flex;"><span>        [Parameter(<span style="color:#a6e22e">Mandatory</span>)]
+</span></span><span style="display:flex;"><span>        [<span style="color:#66d9ef">string</span>]$Domain,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        [Parameter(<span style="color:#a6e22e">Mandatory</span>)]
+</span></span><span style="display:flex;"><span>        [<span style="color:#66d9ef">string</span>]$SamAccountName
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    $account = New-Object System.Security.Principal.NTAccount(<span style="color:#e6db74">&#34;</span>$Domain<span style="color:#e6db74">\</span>$SamAccountName<span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    $sid = $account.Translate([<span style="color:#66d9ef">System.Security.Principal.SecurityIdentifier</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> $sid.Value
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Usage</span>
+</span></span><span style="display:flex;"><span>$sid = Get-UserSID -Domain <span style="color:#e6db74">&#34;CONTOSO&#34;</span> -SamAccountName <span style="color:#e6db74">&#34;User1&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$dn = <span style="color:#e6db74">&#34;OU=Test,DC=contoso,DC=net&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># computer class GUID</span>
+</span></span><span style="display:flex;"><span>$computerGuid = [<span style="color:#66d9ef">Guid</span>]<span style="color:#e6db74">&#34;bf967a86-0de6-11d0-a285-00aa003049e2&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ADSI bind</span>
+</span></span><span style="display:flex;"><span>$de = [<span style="color:#66d9ef">ADSI</span>]<span style="color:#e6db74">&#34;LDAP://</span>$dn<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># IMPORTANT:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Use ObjectSecurity instead of ntSecurityDescriptor property</span>
+</span></span><span style="display:flex;"><span>$adsSecurity = $de.ObjectSecurity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Get raw binary SD</span>
+</span></span><span style="display:flex;"><span>$sdBytes = $adsSecurity.GetSecurityDescriptorBinaryForm()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Build Raw SD</span>
+</span></span><span style="display:flex;"><span>$rawSD = New-Object System.Security.AccessControl.RawSecurityDescriptor(
+</span></span><span style="display:flex;"><span>    $sdBytes,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$dacl = $rawSD.DiscretionaryAcl
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$csd = New-Object System.Security.AccessControl.CommonSecurityDescriptor `
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    $false,
+</span></span><span style="display:flex;"><span>    $false,
+</span></span><span style="display:flex;"><span>    $sdBytes,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Initial Canonical:&#34;</span> $csd.DiscretionaryAcl.IsCanonical
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Empty DACL</span>
+</span></span><span style="display:flex;"><span>$newDacl = New-Object System.Security.AccessControl.RawAcl(
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.Security.AccessControl.GenericAcl</span>]::AclRevisionDS,  <span style="color:#75715e"># = 4</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span>($i=<span style="color:#ae81ff">0</span>;$i <span style="color:#f92672">-lt</span> $rawSD.DiscretionaryAcl.Count;$i++)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    $newDacl.InsertAce($i,$rawSD.DiscretionaryAcl[$i])
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ALLOW CreateChild Computer</span>
+</span></span><span style="display:flex;"><span>$allowAce = New-Object System.Security.AccessControl.ObjectAce `
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.Security.AccessControl.AceFlags</span>]::ContainerInherit,
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.Security.AccessControl.AceQualifier</span>]::AccessAllowed,
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.DirectoryServices.ActiveDirectoryRights</span>]::CreateChild,
+</span></span><span style="display:flex;"><span>    $sid,
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.Security.AccessControl.ObjectAceFlags</span>]::ObjectAceTypePresent,
+</span></span><span style="display:flex;"><span>    $computerGuid,
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">Guid</span>]::Empty,
+</span></span><span style="display:flex;"><span>    $false,
+</span></span><span style="display:flex;"><span>    $null
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># DENY CreateChild Computer</span>
+</span></span><span style="display:flex;"><span>$denyAce = New-Object System.Security.AccessControl.ObjectAce `
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.Security.AccessControl.AceFlags</span>]::ContainerInherit,
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.Security.AccessControl.AceQualifier</span>]::AccessDenied,
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.DirectoryServices.ActiveDirectoryRights</span>]::CreateChild,
+</span></span><span style="display:flex;"><span>    $sid,
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">System.Security.AccessControl.ObjectAceFlags</span>]::ObjectAceTypePresent,
+</span></span><span style="display:flex;"><span>    $computerGuid,
+</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">Guid</span>]::Empty,
+</span></span><span style="display:flex;"><span>    $false,
+</span></span><span style="display:flex;"><span>    $null
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># WRONG ORDER:</span>
+</span></span><span style="display:flex;"><span>$newDacl.InsertAce(<span style="color:#ae81ff">0</span>,$allowAce)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$newDacl.InsertAce(
+</span></span><span style="display:flex;"><span>    $newDacl.Count,
+</span></span><span style="display:flex;"><span>    $denyAce
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$rawSD.DiscretionaryAcl = $newDacl
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;After Insert Canonical:&#34;</span> $rawSD.DiscretionaryAcl.IsCanonical
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Write back to AD</span>
+</span></span><span style="display:flex;"><span>$bytes = New-Object byte[] ($rawSD.BinaryLength)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$rawSD.GetBinaryForm($bytes,<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$adsSecurity.SetSecurityDescriptorBinaryForm($bytes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$de.ObjectSecurity = $adsSecurity
+</span></span><span style="display:flex;"><span>$de.CommitChanges()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;ACL written.&#34;</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Re-read from AD</span>
+</span></span><span style="display:flex;"><span>$de2 = [<span style="color:#66d9ef">ADSI</span>]<span style="color:#e6db74">&#34;LDAP://</span>$dn<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$verifyBytes = $de2.ObjectSecurity.GetSecurityDescriptorBinaryForm()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$verifySD = New-Object System.Security.AccessControl.RawSecurityDescriptor(
+</span></span><span style="display:flex;"><span>    $verifyBytes,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$csd = New-Object System.Security.AccessControl.CommonSecurityDescriptor `
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    $false,
+</span></span><span style="display:flex;"><span>    $false,
+</span></span><span style="display:flex;"><span>    $verifyBytes,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Canonical after AD write:&#34;</span> $csd.DiscretionaryAcl.IsCanonical
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;ACE order after AD save:&#34;</span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$i = <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span>($ace <span style="color:#66d9ef">in</span> $verifySD.DiscretionaryAcl)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    Write-Host <span style="color:#e6db74">&#34;</span>$i<span style="color:#e6db74"> : </span>$($ace.AceQualifier)<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    $i++
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="what-this-shows">What This Shows</h3>
+<p>When you run this script against a test OU, you may observe one of three outcomes:</p>
+<p><strong>Outcome A — AD preserved the non-canonical order:</strong></p>
+<pre tabindex="0"><code>[0] AccessAllowed — CreateChild
+[1] AccessDenied  — CreateChild
+</code></pre><p>This is the dangerous case. The Allow ACE is evaluated first. If a caller requests <code>CreateChild</code> rights, the access check accumulates that right from the Allow ACE and stops — the Deny ACE is never reached. The principal can create computer objects despite the explicit deny.</p>
+<p><a href="https://managedpriv.com/images/blog/CreateComputer.png"><img class="img-fluid d-block mx-auto" src="../../images/blog/CreateComputer.webp" onerror="this.src='..\/..\/images\/blog\/CreateComputer.png'" alt="post thumb"></a></p>
+<p>In this picture user CONTOSO\User1 can create computer objects in the target OU, even with a Deny ACE.</p>
+<p><strong>Outcome B — AD canonicalized on write:</strong></p>
+<pre tabindex="0"><code>[0] AccessDenied  — CreateChild
+[1] AccessAllowed — CreateChild
+</code></pre><p>The DC reordered the ACL. The Deny wins as expected.</p>
+<p><strong>Outcome C — CommitChanges() throws a constraint violation but the write partially succeeded:</strong>
+This is an ADSI behavior where the server modifies the submitted security descriptor during commit, and the ADSI COM layer detects the mismatch and raises an error even though the write completed. Read back the ACL to determine what was actually stored.</p>
+<h2 id="duplicate-access-control-entries">Duplicate Access Control Entries</h2>
+<p>Normally, <code>AddAccessRule()</code> deduplicates and merges ACEs together for a security principal, meaning you will not see a user have the same permission delegated more than once in the ACL. But by bypassing these checks we can have as many of the same as we like.</p>
+<p><a href="https://managedpriv.com/images/blog/CanonicalFalseDuplicate.png"><img class="img-fluid d-block mx-auto" src="../../images/blog/CanonicalFalseDuplicate.webp" onerror="this.src='..\/..\/images\/blog\/CanonicalFalseDuplicate.png'" alt="post thumb"></a></p>
+<p>In this picture we can see that CONTOSO\User1 has four of the identical Access Control Entries.</p>
+<h2 id="detection">Detection</h2>
+<p>So how can you determine if a DACL is in canonical order? Some tools like DSA.MSC (Active Directory Users and Computers) will warn you and let you decide whether you want to apply a canonical order.</p>
+<p><a href="https://managedpriv.com/images/blog/dsa_msc_dacl_reorder.png"><img class="img-fluid d-block mx-auto" src="../../images/blog/dsa_msc_dacl_reorder.webp" onerror="this.src='..\/..\/images\/blog\/dsa_msc_dacl_reorder.png'" alt="post thumb"></a></p>
+<p>Programmatically, you can use <code>CommonSecurityDescriptor</code>, which exposes an <code>IsCanonical</code> property on its <code>DiscretionaryAcl</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$dn = <span style="color:#e6db74">&#34;OU=Test,DC=contoso,DC=net&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ADSI bind</span>
+</span></span><span style="display:flex;"><span>$de = [<span style="color:#66d9ef">ADSI</span>]<span style="color:#e6db74">&#34;LDAP://</span>$dn<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># IMPORTANT:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Use ObjectSecurity instead of ntSecurityDescriptor property</span>
+</span></span><span style="display:flex;"><span>$adsSecurity = $de.ObjectSecurity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Get raw binary SD</span>
+</span></span><span style="display:flex;"><span>$sdBytes = $adsSecurity.GetSecurityDescriptorBinaryForm()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$csd = New-Object System.Security.AccessControl.CommonSecurityDescriptor `
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    $false,
+</span></span><span style="display:flex;"><span>    $false,
+</span></span><span style="display:flex;"><span>    $sdBytes,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Initial Canonical:&#34;</span> $csd.DiscretionaryAcl.IsCanonical
+</span></span></code></pre></div><h2 id="why-this-matters-in-practice">Why This Matters in Practice</h2>
+<p>The practical implication is that non-canonical ACLs are a real security concern in environments where:</p>
+<ul>
+<li>Raw security descriptor restore is performed without explicit canonicalization</li>
+<li>Migration tools write ACLs via binary LDAP</li>
+<li>Scripts use <code>InsertAce()</code> without understanding the ordering requirements</li>
+<li>Non-canonical ACLs are imported from another system</li>
+</ul>
+<p>A non-canonical ACL that reaches AD and survives the write — which, as demonstrated above, is possible — can silently undermine Deny ACEs. The access result becomes unpredictable, varying by API, token state, generic right mapping, and whether inherited ACEs are involved.</p>
+<p>Microsoft&rsquo;s official position on non-canonical ACLs is that their behavior is undefined. That is accurate, but it understates the risk: undefined does not mean harmless.</p>
+<h2 id="what-tools-should-do">What Tools Should Do</h2>
+<h3 id="restore--migration-mode">Restore / migration mode</h3>
+<p>Write ACEs in their original order using <code>InsertAce()</code> and do not canonicalize. Your goal is bit-perfect fidelity to the source, including any non-canonical ordering that was present in the original.</p>
+<h3 id="new-delegation-authoring-mode">New delegation authoring mode</h3>
+<p>Canonicalize explicitly before writing. Do not rely on <code>AddAccessRule()</code> to do this for you — it canonicalizes, but it also merges, mutates flags, and loses information. Instead, sort the final <code>RawAcl</code> yourself by the canonical ordering rules, then write it via binary form.</p>
+<p>A simple canonical sort orders ACEs as:</p>
+<ol>
+<li>Explicit Deny (non-inherited, <code>AceQualifier.AccessDenied</code>, no <code>Inherited</code> flag in <code>AceFlags</code>)</li>
+<li>Explicit Allow (non-inherited, <code>AceQualifier.AccessAllowed</code>, no <code>Inherited</code> flag in <code>AceFlags</code>)</li>
+<li>Inherited Deny (<code>Inherited</code> flag set, <code>AccessDenied</code>)</li>
+<li>Inherited Allow (<code>Inherited</code> flag set, <code>AccessAllowed</code>)</li>
+</ol>
+<p>Within each category, <code>ObjectAce</code> entries come before <code>CommonAce</code> entries.</p>
+<h2 id="summary">Summary</h2>
+<p>Canonical ACL order exists because Windows evaluates ACEs sequentially from the first entry to the last. Deny ACEs must precede Allow ACEs or the Deny may never be reached during access evaluation.</p>
+<p>AD does not always enforce canonical ordering when a security descriptor is written via raw binary LDAP. Non-canonical ACLs can survive the commit and create conditions where Allow overrides Deny.</p>
+<p>Tools that work with <code>RawSecurityDescriptor</code> have the power to write ACLs with precise fidelity — including non-canonical ordering, intentionally or by mistake. That same power means the tool author is responsible for understanding and managing ACE order explicitly, rather than relying on the API to get it right.</p>
+<hr>
+<p><em>This post is the second in a short series on AD ACL internals. The <a href="/blog/activedirectorysecurity-design-problems/">companion post</a> covers the design problems in <code>System.DirectoryServices.ActiveDirectorySecurity</code> that make it unsuitable for fidelity-critical tooling.</em></p>
+
+        </div>
+        <!-- tags -->
+        <div class="mb-3">
+          <h5 class="d-inline-block mr-3">Tags:</h5>
+          <ul class="list-inline d-inline-block">
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/active%20directory">Active Directory</a>,</li>
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/acl">ACL</a>,</li>
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/canonical%20order">Canonical Order</a>,</li>
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/security%20descriptor">Security Descriptor</a>,</li>
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/powershell">PowerShell</a>,</li>
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/rawsecuritydescriptor">RawSecurityDescriptor</a>,</li>
+            
+            <li class="list-inline-item"><a class="text-color" href="https://managedpriv.com/tags/access%20control">Access Control</a>,</li>
+            
+          </ul>
+        </div>
+        
+        
+          <div id="disqus_thread"></div>
+          <script>
+          (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://managedpriv-com.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- latest post -->
+  <div class="bg-white px-4 py-5 box-shadow mb-5">
+    <h4 class="mb-4">Latest Article</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/acl-canonical-order-and-security/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/CanonicalOrder.png"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/acl-canonical-order-and-security/">
+          <h5 class="mt-0">The Deny ACE That Never Fires: Non-Canonical ACL Order in Active Directory</h5>
+        </a>
+        02 Jun 2026
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/activedirectorysecurity-design-problems/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/ActiveDirectorySecurityClass.png"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/activedirectorysecurity-design-problems/">
+          <h5 class="mt-0">The Hidden Traps in ActiveDirectorySecurity Class</h5>
+        </a>
+        22 May 2026
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://managedpriv.com/blog/breaching-the-sensitive-action-zone-in-entra-id-pim/"><img class="mr-3 post-thumb-sm" src="https://managedpriv.com/images/blog/Security_Zone_Sensitive_Actions.png"></a>
+      <div class="media-body">
+        <a href="https://managedpriv.com/blog/breaching-the-sensitive-action-zone-in-entra-id-pim/">
+          <h5 class="mt-0">Breaching the sensitive action zone in Entra ID PIM</h5>
+        </a>
+        19 Apr 2024
+      </div>
+    </div>
+    
+  </div>
+  <!-- categories -->
+  <div class="bg-white px-4 py-5 box-shadow mb-5">
+    <h4 class="mb-4">Category</h4>
+    <ul class="list-styled style-circle">
+      <li class="border-bottom border-color"><a href="/categories/acl" class="text-color d-block pb-3 mt-3 text-decoration-none">ACL</a></li>
+      <li class="border-bottom border-color"><a href="/categories/active-directory" class="text-color d-block pb-3 mt-3 text-decoration-none">Active directory</a></li>
+      <li class="border-bottom border-color"><a href="/categories/active-directory-coding" class="text-color d-block pb-3 mt-3 text-decoration-none">Active directory coding</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/ad-acl-scanner" class="text-color d-block pb-3 mt-3 text-decoration-none">Ad ACL scanner</a></li>
+      <li class="border-bottom border-color"><a href="/categories/azure-ad" class="text-color d-block pb-3 mt-3 text-decoration-none">Azure ad</a></li>
+      <li class="border-bottom border-color"><a href="/categories/entra-id" class="text-color d-block pb-3 mt-3 text-decoration-none">Entra ID</a></li>
+      <li class="border-bottom border-color"><a href="/categories/forest-security-boundary" class="text-color d-block pb-3 mt-3 text-decoration-none">Forest security boundary</a></li>
+      <li class="border-bottom border-color"><a href="/categories/gpo" class="text-color d-block pb-3 mt-3 text-decoration-none">Gpo</a></li>
+      <li class="border-bottom border-color"><a href="/categories/passwords" class="text-color d-block pb-3 mt-3 text-decoration-none">Passwords</a></li>
+      <li class="border-bottom border-color"><a href="/categories/privilege-identity-management" class="text-color d-block pb-3 mt-3 text-decoration-none">Privilege identity management</a></li>
+      <li class="border-bottom border-color"><a href="/categories/security" class="text-color d-block pb-3 mt-3 text-decoration-none">Security</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white px-4 py-5 box-shadow mb-5">
+    <h4 class="mb-4">Tags</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/access-control">Access control</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/acl">ACL</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/active-directory">Active directory</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/activedirectorysecurity">Activedirectorysecurity</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/ad">Ad</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/api">API</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/assessment">Assessment</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/azure-ad">Azure ad</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/canonical-order">Canonical order</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/entra-id">Entra ID</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/forest">Forest</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/gpo">Gpo</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/password">Password</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/pim">PIM</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/powershell">Powershell</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/privilege-access">Privilege access</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/privileged-account">Privileged account</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/rawsecuritydescriptor">Rawsecuritydescriptor</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/security">Security</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/security-descriptor">Security descriptor</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust">Trust</a></li>
+      <li class="list-inline-item"><a class="hover-ripple" href="/tags/trust-account">Trust account</a></li>
+    </ul>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+<!-- /blog details -->
+
+
+<footer>
+  
+  <div class="section bg-secondary">
+    <div class="container">
+      <div class="row justify-content-between">
+        
+        <div class="col-lg-5 mb-5 mb-lg-0">
+          
+          <a class="mb-4 d-inline-block" href="/"><img class="img-fluid"
+              src="https://managedpriv.com/images/logo-alt.png" alt="Robin Granberg - Managed Privileges"></a>
+          <p class="text-light mb-5"></p>
+          <h4 class="text-white mb-4">FOLLOW ME ON</h4>
+          
+          <ul class="list-inline social-icon-alt">
+            
+            <li class="list-inline-item">
+              <a class="hover-ripple" href="https://twitter.com/ipcdollar1"><i class="fa fa-twitter"></i></a>
+            </li>
+            
+            <li class="list-inline-item">
+              <a class="hover-ripple" href="https://github.com/canix1"><i class="fa fa-github"></i></a>
+            </li>
+            
+            <li class="list-inline-item">
+              <a class="hover-ripple" href="https://www.linkedin.com/in/robin-granberg"><i class="fa fa-linkedin"></i></a>
+            </li>
+            
+          </ul>
+        </div>
+        <div class="col-lg-6">
+          <div class="row">
+            
+            <div class="col-6 mb-5">
+              <h4 class="text-white mb-4">MANAGEDPRIV.COM</h4>
+              <ul class="list-styled">
+                
+              </ul>
+            </div>
+            
+            <div class="col-6 mb-5">
+              <h4 class="text-white mb-4">Contact Info</h4>
+              <ul class="list-unstyled">
+                <li class="text-light mb-3"></li>
+                <li class="text-light mb-3">robin.granberg@protonmail.com</li>
+                <li class="text-light mb-3"></li>
+              </ul>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bg-secondary-darken py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
+          <p class="mb-0 text-white"></p>
+        </div>
+        <div class="col-md-6 text-center text-md-right">
+          <ul class="list-inline">
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+<script>
+  var indexURL = "https://managedpriv.com/index.json"
+</script>
+
+
+<!-- Google Map API -->
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu5nZKbeK-WHQ70oqOWo-_4VmwOwKP9YQ"></script>
+
+
+<!-- JS Plugins -->
+
+<script src="https://managedpriv.com/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://managedpriv.com/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://managedpriv.com/plugins/slick/slick.min.js"></script>
+
+<script src="https://managedpriv.com/plugins/google-map/gmap.js"></script>
+
+<script src="https://managedpriv.com/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://managedpriv.com/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+<script src="https://managedpriv.com/plugins/search/fuse.min.js"></script>
+
+<script src="https://managedpriv.com/plugins/search/mark.js"></script>
+
+<script src="https://managedpriv.com/plugins/search/search.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://managedpriv.com/js/script.min.js"></script>
+
+<!-- google analitycs -->
+</body>
+
+</html>

@@ -2,43 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://managedpriv.com/tags/access-control/</loc>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
+  </url><url>
     <loc>https://managedpriv.com/tags/acl/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/categories/acl/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/tags/active-directory/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/categories/active-directory-coding/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://managedpriv.com/tags/activedirectorysecurity/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/blog/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/tags/canonical-order/</loc>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/categories/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/tags/powershell/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/tags/rawsecuritydescriptor/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/categories/security/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/tags/security-descriptor/</loc>
-    <lastmod>2026-05-22T10:00:00+00:00</lastmod>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/tags/</loc>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/blog/acl-canonical-order-and-security/</loc>
+    <lastmod>2026-06-02T21:08:00+00:00</lastmod>
+  </url><url>
+    <loc>https://managedpriv.com/tags/activedirectorysecurity/</loc>
     <lastmod>2026-05-22T10:00:00+00:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/blog/activedirectorysecurity-design-problems/</loc>
@@ -104,7 +113,7 @@
     <loc>https://managedpriv.com/tags/assessment/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
   </url><url>
-    <loc>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-2/</loc>
+    <loc>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls---part-2/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/tags/gpo/</loc>
@@ -119,7 +128,7 @@
     <loc>https://managedpriv.com/tags/security/</loc>
     <lastmod>2020-06-10T15:58:12+06:00</lastmod>
   </url><url>
-    <loc>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls-part-1/</loc>
+    <loc>https://managedpriv.com/blog/finding-highly-privileged-accounts-in-acls---part-1/</loc>
     <lastmod>2020-04-27T10:47:55+06:00</lastmod>
   </url><url>
     <loc>https://managedpriv.com/project/ad-acl-scanner/</loc>
@@ -136,8 +145,6 @@
   </url><url>
     <loc>https://managedpriv.com/project/</loc>
     <lastmod>2019-02-07T10:47:55+06:00</lastmod>
-  </url><url>
-    <loc>https://managedpriv.com/blog/forest_trust_accounts/</loc>
   </url><url>
     <loc>https://managedpriv.com/about/</loc>
   </url><url>
